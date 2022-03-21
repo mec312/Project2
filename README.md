@@ -1,3 +1,4 @@
 # Project2
 
-Config Sefver
+config server
+gateway server
