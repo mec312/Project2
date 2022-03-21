@@ -1,0 +1,18 @@
+server:
+    port: 8084
+spring:
+    application:
+        name: banking-user-service
+    cloud:
+        config:
+            uri: http://localhost:8081
+            username: nttdata
+            password: nttd4t4
+    data:
+        mongodb:
+            database: apibanca
+            port: 27017
+eureka:
+    client:
+        service-url:
+            defaultZone: http://localhost:8082/eureka/

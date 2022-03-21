@@ -1,0 +1,12 @@
+spring:
+    application:
+        name: banking-gateway-service
+    cloud:
+        config:
+            uri: http://localhost:8081
+            username: nttdata
+            password: nttd4t4
+        gateway:
+            discovery:
+                locator:
+                    enabled: true

@@ -1,0 +1,18 @@
+server:
+  port: 8081
+spring:
+  security:
+    user:
+      name: nttdata
+      password: nttd4t4
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/mec312/Project2.git
+          username: nttdata
+          password: nttdata
+          search-paths: /
+          default-label: "main"
+  profiles:
+    active: dev
