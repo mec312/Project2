@@ -1,7 +1,7 @@
 package com.api.bank.model;
 
-import com.api.bank.internal.Status;
-import com.api.bank.internal.Type;
+import com.api.bank.internal.UserStatus;
+import com.api.bank.internal.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -24,6 +24,6 @@ public class User {
     private String lastName;
     private int age;
     private String dni;
-    private Status status;
-    private Type type;
+    private UserStatus userStatus;
+    private UserType userType;
 }

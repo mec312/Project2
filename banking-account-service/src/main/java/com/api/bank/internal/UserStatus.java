@@ -1,5 +1,5 @@
 package com.api.bank.internal;
 
-public enum Status {
+public enum UserStatus {
     PENDING, APPROVED, DISABLED, BLACKLIST
 }

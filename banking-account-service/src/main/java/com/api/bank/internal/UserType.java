@@ -1,5 +1,5 @@
 package com.api.bank.internal;
 
-public enum Type {
+public enum UserType {
     PERSONAL, VIP, PYME, BUSSINESS
 }
