@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 @Log4j2
 @RestController
@@ -17,8 +18,8 @@ public class AccountController {
     private AccountService accountService;
 
     @GetMapping(value = "/findAccountByNumber")
-    public ResponseEntity findAccountByNumber(@RequestParam(required = true) String accountNumber) {
-        return ResponseEntity.ok(accountService.findAccountbyNumber(accountNumber));
+    public ResponseEntity<Mono<Account>> findAccountByNumber(@RequestParam(required = true) String accountNumber) {
+        return accountService.findAccountbyNumber(accountNumber);
     }
 
     @PostMapping(value = "/regAccount")
