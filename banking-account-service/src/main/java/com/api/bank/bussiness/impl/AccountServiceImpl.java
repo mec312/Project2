@@ -23,6 +23,11 @@ public class AccountServiceImpl implements AccountService {
         return validaRespuesta(acc);
     }
 
+    public ResponseEntity<Mono<Account>> createAccount(Account acc) {
+        Account acct = accountDao.createAccount(acc);
+        return validaRespuesta(acct);
+    }
+
     private ResponseEntity<Mono<Account>> validaRespuesta(Account account) {
         return (account!=null)
                 ? ResponseEntity.ok(Mono.just(account)):ResponseEntity.noContent().build();
