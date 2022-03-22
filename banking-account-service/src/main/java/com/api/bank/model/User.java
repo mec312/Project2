@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(value = "User")
+//@Document(value = "User")
 public class User {
 
     @Id

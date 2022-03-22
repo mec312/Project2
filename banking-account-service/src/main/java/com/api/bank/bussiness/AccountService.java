@@ -6,4 +6,5 @@ import reactor.core.publisher.Mono;
 
 public interface AccountService {
     ResponseEntity<Mono<Account>> findAccountbyNumber(String accountNumber);
+    ResponseEntity<Mono<Account>> createAccount(Account acc);
 }
