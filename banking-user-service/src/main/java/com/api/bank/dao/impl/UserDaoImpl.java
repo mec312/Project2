@@ -4,6 +4,8 @@ import com.api.bank.dao.UserDao;
 import com.api.bank.internal.UserStatus;
 import com.api.bank.model.User;
 import com.api.bank.repository.UserRepository;
+import io.reactivex.Maybe;
+import io.reactivex.Single;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,21 +18,25 @@ public class UserDaoImpl implements UserDao {
     private UserRepository repository;
 
     @Override
-    public User createUser(User uss){
-        return repository.save(uss);
+    public Maybe<User> createUser(User uss){
+      return Maybe.just(repository.save(uss));
     }
 
     @Override
-    public User findByDni(String dni) {
-        return repository.findByDni(dni);
+    public Maybe<User> findByDni(String dni) {
+        return Maybe.just(repository.findByDni(dni))
+                .switchIfEmpty(Maybe.just(new User()));
     }
 
     @Override
-    public User updateUser(String dni, UserStatus sta){
-        User uss = findByDni(dni);
-        uss.setUserStatus(sta);
-        repository.save(uss);
-        return uss;
+    public Maybe<User> updateUser(String dni, UserStatus sta){
+        return findByDni(dni)
+                .map(user -> {
+                    user.setUserStatus(sta);
+                    repository.save(user);
+                    return user;
+                });
+
     }
 
 

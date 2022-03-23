@@ -2,6 +2,7 @@ package com.api.bank.web;
 
 import com.api.bank.bussiness.UserService;
 import com.api.bank.model.User;
+import io.reactivex.Maybe;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,17 +18,9 @@ public class UserController {
     private UserService userService;
 
     @PostMapping(value = "/regUser")
-    public HttpStatus createUser(@RequestBody User request) {
+    public Maybe<ResponseEntity<User>> createUser(@RequestBody User request) {
         log.info("Creating user with {}", request.toString());
-        ResponseEntity us = userService.findByDni(request.getDni());
-
-        if (us.getStatusCodeValue() != 200) {
-            userService.createUser(request);
-            log.info("ENTROOOOO 2 > "+request.toString());
-            return HttpStatus.CREATED;
-        }else{
-            return HttpStatus.OK;
-        }
+        return userService.createUser(request);
 
     }
 
@@ -38,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/findUserbyDni")
-    public ResponseEntity<Mono<User>> findByDni(@RequestParam(required = true) String dni) {
+    public Maybe<ResponseEntity<User>> findByDni(@RequestParam(required = true) String dni) {
         log.info("Reading user by id {}", userService.findByDni(dni));
         return userService.findByDni(dni);
     }

@@ -63,6 +63,11 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-bootstrap</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>io.reactivex.rxjava2</groupId>
+			<artifactId>rxjava</artifactId>
+		</dependency>
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
