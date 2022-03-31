@@ -7,7 +7,9 @@ spring:
         - id: banking-user-service
           uri: lb://servicio-cliente
           predicates:
-            - Path=/ms/cliente/**          
+            - Path=/ms/cliente/**   
+          filters:  
+            - StripPrefix=2
 server:
     port: 8083
 
