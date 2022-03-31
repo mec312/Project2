@@ -5,7 +5,9 @@ spring:
     gateway:
       routes:
         - id: banking-user-service
-          uri: http://localhost:8084          
+          uri: lb://servicio-cliente
+          predicates:
+            - Path=/ms/cliente/**          
 server:
     port: 8083
 
