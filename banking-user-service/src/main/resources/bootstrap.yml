@@ -10,8 +10,7 @@ spring:
             password: nttd4t4
     data:
         mongodb:
-            database: apibanca
-            port: 27017
+            uri: mongodb+srv://xvris:xvris@cluster0.bpun4.mongodb.net/apibanca
 eureka:
     client:
         service-url:
