@@ -19,13 +19,21 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Maybe<User> createUser(User uss){
-      return Maybe.just(repository.save(uss));
+        /*Correcion*/
+      return repository.findByDni(uss.getDni()) == null
+                ? Maybe.just(repository.save(uss))
+                : Maybe.empty();
     }
 
     @Override
     public Maybe<User> findByDni(String dni) {
-        return Maybe.just(repository.findByDni(dni))
-                .switchIfEmpty(Maybe.just(new User()));
+        return repository.findByDni(dni) != null
+                ? Maybe.just(repository.findByDni(dni))
+                : Maybe.empty();
+
+        //return Maybe.just(repository.findByDni(dni));
+                //.switchIfEmpty(Maybe.just(new User()));
+
     }
 
     @Override
