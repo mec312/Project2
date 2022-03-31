@@ -5,7 +5,7 @@ spring:
     gateway:
       routes:
         - id: banking-user-service
-          uri: lb://servicio-cliente
+          uri: lb://banking-user-service
           predicates:
             - Path=/ms/cliente/**   
           filters:  
