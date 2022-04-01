@@ -2,6 +2,8 @@ package com.api.bank.model;
 
 import com.api.bank.internal.AccountStatus;
 import com.api.bank.internal.AccountType;
+import com.api.bank.internal.CreditStatus;
+import com.api.bank.internal.CreditType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -30,11 +32,11 @@ public class Credit {
 
     @NotNull
     @Valid
-    private AccountType type;
+    private CreditType type;
 
     @NotNull
     @Valid
-    private AccountStatus status;
+    private CreditStatus status;
 
     @NotNull
     @Valid

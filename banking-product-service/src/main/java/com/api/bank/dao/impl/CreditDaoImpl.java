@@ -20,13 +20,13 @@ public class CreditDaoImpl implements CreditDao {
     }
 
     public Credit createCredit(Credit cre) {
-        String credNumber =
-        String uri = "http://localhost:8084/user/findUserbyDni?dni=" + dni;
+        String credNumber = cre.getNumber();
+        String uri = "http://localhost:8085/product/credit/findCreditbyNumber?creditNumber=" + credNumber;
         RestTemplate restTemplate = new RestTemplate();
-        User ussRes = restTemplate.getForObject(uri, User.class, User.class);
-        if (ussRes != null) {
-            repository.save(acc);
+        Credit credRes = restTemplate.getForObject(uri, Credit.class, Credit.class);
+        if (credRes != null) {
+            repository.save(cre);
         }
-        return acc;
+        return cre;
     }
 }
