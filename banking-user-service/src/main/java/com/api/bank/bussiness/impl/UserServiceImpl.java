@@ -23,15 +23,6 @@ public class UserServiceImpl implements UserService {
     public Maybe<ResponseEntity<User>> createUser(User uss) {
         return userDao.createUser(uss)
                 .map(user -> validaRespuesta(user));
-        /*
-        return userDao.findByDni(uss.getDni()).map(use -> {
-            if (use.getDni().isEmpty()) {
-                userDao.createUser(uss)
-                        .map(user -> validaRespuesta(user));
-            }
-            return use;
-        }).map(ResponseEntity::ok);
-        */
     }
 
 
@@ -45,7 +36,6 @@ public class UserServiceImpl implements UserService {
     public Maybe<ResponseEntity<User>> updateUser(String dni, UserStatus sta){
         return userDao.updateUser(dni, sta)
                 .map(user-> validaRespuesta(user));
-
     }
 
     private ResponseEntity<User> validaRespuesta(User user) {
