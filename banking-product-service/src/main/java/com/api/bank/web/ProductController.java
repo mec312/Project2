@@ -2,6 +2,7 @@ package com.api.bank.web;
 
 import com.api.bank.bussiness.AccountService;
 import com.api.bank.model.Account;
+import com.api.bank.model.Credit;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,4 +36,20 @@ public class ProductController {
         }
 
     }
+
+    @GetMapping(value = "/credit/regCredit")
+    public ResponseEntity<Mono<Credit>> findCreditbyNumber(@RequestBody Credit request){
+        return null;
+    }
+
+    @PostMapping(value = "/credit/findCreditByNumber")
+    public HttpStatus createCredit(@RequestBody Credit request){
+        return  null;
+    }
+
+    @PostMapping(value = "/credit/updateCredit")
+    public HttpStatus updateCredit(@RequestBody Credit request){
+        return  null;
+    }
+
 }

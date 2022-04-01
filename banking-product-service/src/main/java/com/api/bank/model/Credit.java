@@ -17,9 +17,8 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(value = "Account")
-public class Account {
-
+@Document(value = "Credit")
+public class Credit {
     @Id
     @Field("_id")
     @JsonIgnore
