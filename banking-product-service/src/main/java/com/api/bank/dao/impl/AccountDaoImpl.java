@@ -24,17 +24,17 @@ public class AccountDaoImpl implements AccountDao {
         return repository.findAccountByNumber(accountNumber) != null
                 ? Maybe.just(repository.findAccountByNumber(accountNumber))
                 : Maybe.empty();
-        //return repository.findAccountByNumber(accountNumber);
+
     }
 
     public Maybe<Account> createAccount(Account acc) {
+        /*Revisar*/
         Optional.ofNullable(repository.findAccountByNumber(acc.getNumber()))
                 .ifPresent(u -> {
                     throw new ValidationException("La cuenta ya existe");
                 });
 
-        String dni = acc.getUser().getDni();
-        String uri = "http://localhost:8084/user/findUserbyDni?dni=" + dni;
+        String uri = "http://localhost:8084/user/findUserbyDni?dni=" + acc.getUser().getDni();
         RestTemplate restT = new RestTemplate();
         User ussRes = restT.getForObject(uri, User.class, User.class);
 
