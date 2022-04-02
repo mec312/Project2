@@ -3,6 +3,8 @@ package com.api.bank.bussiness.impl;
 import com.api.bank.bussiness.AccountService;
 import com.api.bank.dao.AccountDao;
 import com.api.bank.model.Account;
+import com.api.bank.model.User;
+import io.reactivex.Maybe;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,23 +20,18 @@ public class AccountServiceImpl implements AccountService {
     private final AccountDao accountDao;
 
     @Override
-    public ResponseEntity<Mono<Account>> findAccountbyNumber(String accountNumber) {
-        Account acc = accountDao.findAccountByNumber(accountNumber);
-        return validaRespuesta(acc);
+    public Maybe<ResponseEntity<Account>> findAccountbyNumber(String accountNumber) {
+        return accountDao.findAccountByNumber(accountNumber).map(acc -> validaRespuesta(acc));
+
     }
 
-    public ResponseEntity<Mono<Account>> createAccount(Account acc) {
-        Account acct = accountDao.createAccount(acc);
-        return validaRespuesta(acct);
+    public Maybe<ResponseEntity<Account>> createAccount(Account acc) {
+        return accountDao.createAccount(acc).map(acct -> validaRespuesta(acct));
     }
 
-    private ResponseEntity<Mono<Account>> validaRespuesta(Account account) {
-        return (account != null)
-                ? ResponseEntity.ok(Mono.just(account)) : ResponseEntity.noContent().build();
-    }
-
-    private ResponseEntity<Flux<Account>> validaRespuesta(Flux<Account> account) {
-        return (account != null)
-                ? ResponseEntity.ok(account) : ResponseEntity.noContent().build();
+    private ResponseEntity<Account> validaRespuesta(Account acc) {
+        return (acc != null)
+                ? ResponseEntity.ok(acc)
+                : ResponseEntity.noContent().build();
     }
 }

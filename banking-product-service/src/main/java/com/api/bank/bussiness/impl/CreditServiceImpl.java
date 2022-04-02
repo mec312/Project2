@@ -3,6 +3,7 @@ package com.api.bank.bussiness.impl;
 import com.api.bank.bussiness.CreditService;
 import com.api.bank.dao.CreditDao;
 import com.api.bank.model.Credit;
+import io.reactivex.Maybe;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,23 +19,18 @@ public class CreditServiceImpl implements CreditService {
     private final CreditDao creditDao;
 
     @Override
-    public ResponseEntity<Mono<Credit>> findCreditByNumber(String creditNumber) {
-        Credit cred =  creditDao.findCreditByNumber(creditNumber);
-        return validaRespuesta(cred);
+    public Maybe<ResponseEntity<Credit>> findCreditByNumber(String creditNumber) {
+        return creditDao.findCreditByNumber(creditNumber).map(cred ->validaRespuesta(cred));
     }
 
-    public ResponseEntity<Mono<Credit>> createCredit(Credit cre) {
-        Credit cred = creditDao.createCredit(cre);
-        return validaRespuesta(cred);
+    public Maybe<ResponseEntity<Credit>> createCredit(Credit cre) {
+        return creditDao.createCredit(cre).map(cred -> validaRespuesta(cred));
     }
 
-    private ResponseEntity<Mono<Credit>> validaRespuesta(Credit cred) {
-        return (cred != null)
-                ? ResponseEntity.ok(Mono.just(cred)) : ResponseEntity.noContent().build();
+    private ResponseEntity<Credit> validaRespuesta(Credit cre) {
+        return (cre != null)
+                ? ResponseEntity.ok(cre)
+                : ResponseEntity.noContent().build();
     }
 
-    private ResponseEntity<Flux<Credit>> validaRespuesta(Flux<Credit> cred) {
-        return (cred != null)
-                ? ResponseEntity.ok(cred) : ResponseEntity.noContent().build();
-    }
 }

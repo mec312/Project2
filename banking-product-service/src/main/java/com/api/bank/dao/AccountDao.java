@@ -1,9 +1,10 @@
 package com.api.bank.dao;
 
 import com.api.bank.model.Account;
+import io.reactivex.Maybe;
 
 public interface AccountDao {
-    Account findAccountByNumber(String accountNumber);
+    Maybe<Account> findAccountByNumber(String accountNumber);
 
-    Account createAccount(Account acc);
+    Maybe<Account> createAccount(Account acc);
 }

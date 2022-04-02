@@ -25,7 +25,6 @@ public class UserServiceImpl implements UserService {
                 .map(user -> validaRespuesta(user));
     }
 
-
     @Override
     public Maybe<ResponseEntity<User>> findByDni(String dni){
       return userDao.findByDni(dni)

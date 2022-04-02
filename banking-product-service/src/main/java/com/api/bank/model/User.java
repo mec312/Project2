@@ -8,6 +8,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 @Builder
 @Getter
 @Setter
@@ -20,10 +23,22 @@ public class User {
     @Field("_id")
     @JsonIgnore
     private String id;
+    @Valid
+    @NotNull
     private String firstName;
+    @Valid
+    @NotNull
     private String lastName;
+    @Valid
+    @NotNull
     private int age;
+    @Valid
+    @NotNull
     private String dni;
+    @Valid
+    @NotNull
     private UserStatus status;
+    @Valid
+    @NotNull
     private UserType type;
 }

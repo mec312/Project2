@@ -6,6 +6,7 @@ import com.api.bank.model.Credit;
 import com.api.bank.model.User;
 import com.api.bank.repository.AccountRepository;
 import com.api.bank.repository.CreditRepository;
+import io.reactivex.Maybe;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,11 +16,13 @@ public class CreditDaoImpl implements CreditDao {
     private CreditRepository repository;
 
     @Override
-    public Credit findCreditByNumber(String creditNumber) {
-        return repository.findCreditByNumber(creditNumber);
+    public Maybe<Credit> findCreditByNumber(String creditNumber) {
+        return repository.findCreditByNumber(creditNumber) !=null
+                ? Maybe.just(repository.findCreditByNumber(creditNumber))
+                : Maybe.empty();
     }
 
-    public Credit createCredit(Credit cre) {
+    public Maybe<Credit> createCredit(Credit cre) {
         String credNumber = cre.getNumber();
         String uri = "http://localhost:8085/product/credit/findCreditbyNumber?creditNumber=" + credNumber;
         RestTemplate restTemplate = new RestTemplate();
@@ -27,6 +30,6 @@ public class CreditDaoImpl implements CreditDao {
         if (credRes != null) {
             repository.save(cre);
         }
-        return cre;
+        return Maybe.just(cre);
     }
 }
