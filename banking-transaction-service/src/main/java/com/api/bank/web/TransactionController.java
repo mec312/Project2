@@ -17,7 +17,7 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
-    @PostMapping(value = "/fund-transfer")
+    @PostMapping(value = "/fundTransfer")
     public ResponseEntity FundTransferTransaction(@Valid @RequestBody Transaction trx) {
         log.info("Transferecnia de Fondos- Inicio:", trx.toString());
         return transactionService.FundTransferTransaction(trx.getFromAccount().getNumber(), trx.getToAccount().getNumber(),trx.getAmount());
