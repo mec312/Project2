@@ -20,13 +20,13 @@ public class TransactionController {
     @PostMapping(value = "/fund-transfer")
     public ResponseEntity FundTransferTransaction(@Valid @RequestBody Transaction trx) {
         log.info("Transferecnia de Fondos- Inicio:", trx.toString());
-        return transactionService.FundTransferTransaction(trx.getAccount().getNumber(), trx.getReferenceNumber(),trx.getAmount());
+        return transactionService.FundTransferTransaction(trx.getFromAccount().getNumber(), trx.getToAccount().getNumber(),trx.getAmount());
     }
 
     @PostMapping(value = "/payment")
     public ResponseEntity PayTransaction(@Valid @RequestBody Transaction trx){
         log.info("Pagos - Inicio");
-        return transactionService.PayTransaction(trx.getAmount(), trx.getAccount().getNumber());
+        return transactionService.PayTransaction(trx.getAmount(), trx.getFromAccount().getNumber());
     }
 
 }

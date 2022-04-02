@@ -1,43 +1,43 @@
 package com.api.bank.model;
 
-import com.api.bank.internal.TransactionType;
+import com.api.bank.internal.UserStatus;
+import com.api.bank.internal.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.lang.Nullable;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 
-@Setter
-@Getter
 @Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(value = "Transaction")
-public class Transaction {
+//@Document(value = "User")
+public class User {
+
     @Id
     @Field("_id")
     @JsonIgnore
     private String id;
-
+    @Valid
     @NotNull
+    private String firstName;
     @Valid
-    private BigDecimal amount;
-
     @NotNull
+    private String lastName;
     @Valid
-    private TransactionType transactionType;
-
     @NotNull
+    private int age;
     @Valid
-    private Account fromAccount;
-
-    @Nullable
+    @NotNull
+    private String dni;
     @Valid
-    private Account toAccount;
-
+    @NotNull
+    private UserStatus status;
+    @Valid
+    @NotNull
+    private UserType type;
 }
