@@ -5,13 +5,14 @@ import com.api.bank.dao.CreditDao;
 import com.api.bank.model.Credit;
 import io.reactivex.Maybe;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class CreditServiceImpl implements CreditService {
 

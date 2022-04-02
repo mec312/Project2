@@ -40,11 +40,11 @@ public class Credit {
 
     @NotNull
     @Valid
-    private BigDecimal availableBalance;
+    private BigDecimal amount;
 
     @NotNull
     @Valid
-    private BigDecimal actualBalance;
+    private Integer fees;
 
     @NotNull
     @Valid

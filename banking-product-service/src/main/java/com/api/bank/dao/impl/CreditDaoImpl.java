@@ -7,12 +7,16 @@ import com.api.bank.model.User;
 import com.api.bank.repository.AccountRepository;
 import com.api.bank.repository.CreditRepository;
 import io.reactivex.Maybe;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.validation.ValidationException;
 import java.util.Optional;
 
+@AllArgsConstructor
+@Service
 public class CreditDaoImpl implements CreditDao {
 
     @Autowired
@@ -31,17 +35,7 @@ public class CreditDaoImpl implements CreditDao {
                 .ifPresent(c->{
                     throw new ValidationException("La cuenta ya existe");
                 });
+        return Maybe.just(repository.save(cre));
 
-        String uri = "http://localhost:8085/product/credit/findCreditbyNumber?creditNumber=" + cre.getNumber();
-        RestTemplate restTemplate = new RestTemplate();
-        Credit credRes = restTemplate.getForObject(uri, Credit.class, Credit.class);
-
-        Optional.ofNullable(credRes).ifPresent(uss-> {
-            Maybe.just(repository.save(cre));
-        });
-
-        return Maybe.just(cre);
     }
-
-
 }

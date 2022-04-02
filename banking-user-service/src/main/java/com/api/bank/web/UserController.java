@@ -28,7 +28,6 @@ public class UserController {
     public Maybe<ResponseEntity<User>> createUser(@Valid @RequestBody User request) {
         log.info("Creating user with {}", request.toString());
         return userService.createUser(request);
-
     }
 
     @PostMapping(value = "/updUser")
