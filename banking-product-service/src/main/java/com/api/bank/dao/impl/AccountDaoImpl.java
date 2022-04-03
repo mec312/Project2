@@ -1,6 +1,7 @@
 package com.api.bank.dao.impl;
 
 import com.api.bank.dao.AccountDao;
+import com.api.bank.exception.ValidationException;
 import com.api.bank.model.Account;
 import com.api.bank.model.User;
 import com.api.bank.repository.AccountRepository;
@@ -11,8 +12,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-
-import javax.validation.ValidationException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -36,7 +35,9 @@ public class AccountDaoImpl implements AccountDao {
                     account.setAvailableBalance(acc.getAvailableBalance());
                     repository.save(account);
                         },
-                        () -> {throw new ValidationException("La cuenta no fue encontrada");});
+                        () -> {
+                    throw new ValidationException("La cuenta no fue encontrada");
+                });
         return repository.findAccountByNumber(acc.getNumber()) != null
                 ? Maybe.just(acc)
                 : Maybe.empty();
@@ -45,17 +46,19 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public Maybe<Account> createAccount(Account acc) {
         Optional.ofNullable(repository.findAccountByNumber(acc.getNumber()))
-                .ifPresent(u -> {
+                .ifPresentOrElse(u -> {
                     throw new ValidationException("La cuenta ya existe");
+                }, () -> {
+                    String uri = "http://localhost:8084/user/findUserbyDni?dni=" + acc.getUser().getDni();
+                    RestTemplate restT = new RestTemplate();
+                    User ussRes = restT.getForObject(uri, User.class, User.class);
+
+                    Optional.ofNullable(ussRes).ifPresent(uss -> {
+                        Maybe.just(repository.save(acc));
+                    });
                 });
 
-        String uri = "http://localhost:8084/user/findUserbyDni?dni=" + acc.getUser().getDni();
-        RestTemplate restT = new RestTemplate();
-        User ussRes = restT.getForObject(uri, User.class, User.class);
 
-        Optional.ofNullable(ussRes).ifPresent(uss -> {
-            Maybe.just(repository.save(acc));
-        });
         return Maybe.just(acc);
 
     }
