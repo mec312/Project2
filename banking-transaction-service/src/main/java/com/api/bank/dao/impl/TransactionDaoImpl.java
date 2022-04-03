@@ -1,12 +1,20 @@
 package com.api.bank.dao.impl;
 
 import com.api.bank.dao.TransactionDao;
+import com.api.bank.internal.TransactionType;
+import com.api.bank.model.Account;
 import com.api.bank.model.Transaction;
 import com.api.bank.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
+import javax.validation.ValidationException;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -16,59 +24,99 @@ public class TransactionDaoImpl implements TransactionDao {
 
     @Autowired
     private TransactionRepository repositoryTra;
-    @Autowired
-    private AccountRepository repositoryAcc;
+
+
 
     //tranferir fondos
     @Override
     public Transaction FundTransferTransaction(String fromAccount, String toAccount, BigDecimal amount){
-        Account fromAcc = repositoryAcc.findAccountByNumber(fromAccount);
-        Account toAcc = repositoryAcc.findAccountByNumber(toAccount);
+        RestTemplate restT = new RestTemplate();
+        String uri ="http://localhost:8085/product/account/findAccountByNumber?accountNumber=";
+        Account fromAcc = restT.getForObject(uri+fromAccount,Account.class, Account.class);
+        Account toAcc = restT.getForObject(uri+toAccount,Account.class, Account.class);
 
         //validando balance de cuenta
         validateBalance(fromAcc, amount);
-        String transactionId = internalFundTransfer(fromAcc, toAcc, amount);
-        Transaction trx = Transaction.builder().transactionId(transactionId).amount(amount).build();
-        return trx;
+        Transaction transactionId = internalFundTransfer(fromAcc, toAcc, amount);
+        return transactionId;
     }
 
     //pagar
     @Override
     public Transaction PayTransaction(BigDecimal amount,String account){
         String trxId = UUID.randomUUID().toString();//cambiar
-        Account fromAccount = repositoryAcc.findAccountByNumber(account);
+        RestTemplate restT = new RestTemplate();
+        String uri ="http://localhost:8085/product/account/findAccountByNumber?accountNumber=";
+        Account fromAcc = restT.getForObject(uri+account,Account.class, Account.class);
 
-        //validando balance de cuenta
-        validateBalance(fromAccount, amount);
-        fromAccount.setActualBalance(fromAccount.getActualBalance().subtract(amount));
-        fromAccount.setAvailableBalance(fromAccount.getActualBalance().subtract(amount));
-        Transaction trx = repositoryTra.save(Transaction.builder().transactionType(TransactionType.UTILITY_PAYMENT).account(fromAccount).transactionId(trxId).referenceNumber(account).amount(amount.negate()).build());
+        /*validando balance de cuenta*/
+        validateBalance(fromAcc, amount);
+        /*Seteando nuevos valores*/
+        fromAcc.setActualBalance(fromAcc.getActualBalance().subtract(amount));
+        fromAcc.setAvailableBalance(fromAcc.getActualBalance().subtract(amount));
+        /*Actualizar Saldo en cuenta- aun sin implementar*/
+
+        String restUrl = "http://localhost:8085/product/account/updateAccount";
+        Mono<Account> fromAccMono = Mono.just(fromAcc);
+        Mono<Account> resp = WebClient.create().post()
+                .uri(restUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(fromAccMono,Account.class)
+                .retrieve().bodyToMono(Account.class);//respuesta del post
+
+        /*Generando transaccion*/
+        Transaction trx = repositoryTra.save(Transaction.builder().transactionType(TransactionType.UTILITY_PAYMENT).fromAccount(fromAcc).amount(amount.negate()).build());
         return trx;
 
     }
 
-    private String internalFundTransfer(Account fromAccount, Account toAccount, BigDecimal amount){
+    private Transaction internalFundTransfer(Account fromAccount, Account toAccount, BigDecimal amount){
         String trxId = UUID.randomUUID().toString();//cambiar
-        Account fromAcc = repositoryAcc.findAccountByNumber(fromAccount.getNumber());
-        Account toAcc = repositoryAcc.findAccountByNumber(toAccount.getNumber());
 
-        fromAcc.setActualBalance(fromAcc.getActualBalance().subtract(amount));
-        fromAcc.setAvailableBalance(fromAcc.getActualBalance().subtract(amount));
-        repositoryAcc.save(fromAccount);
-        repositoryTra.save(Transaction.builder().transactionType(TransactionType.FUND_TRANSFER).referenceNumber(toAcc.getNumber()).transactionId(trxId).account(fromAcc).amount(amount.negate()).build());
+        fromAccount.setActualBalance(fromAccount.getActualBalance().subtract(amount));
+        fromAccount.setAvailableBalance(fromAccount.getActualBalance().subtract(amount));
 
-        toAcc.setActualBalance(toAcc.getActualBalance().add(amount));
-        toAcc.setAvailableBalance(toAcc.getActualBalance().add(amount));
-        repositoryAcc.save(toAcc);
-        repositoryTra.save(Transaction.builder().transactionType(TransactionType.FUND_TRANSFER).referenceNumber(toAcc.getNumber()).transactionId(trxId).account(toAcc).amount(amount).build());
+        toAccount.setActualBalance(toAccount.getActualBalance().add(amount));
+        toAccount.setAvailableBalance(toAccount.getActualBalance().add(amount));
+        /*Actualizar Saldo en cuenta- aun sin implementar -1*/
 
-        return trxId;
+        String restUrl = "http://localhost:8085/product/account/updateAccount";
+        Mono<Account> fromAccMono = Mono.just(fromAccount);
+        Mono<Account> toAccMono = Mono.just(toAccount);
+
+        Mono<Account> resp1 = WebClient.create().post()
+                .uri(restUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(fromAccMono,Account.class)
+                .retrieve().bodyToMono(Account.class);//respuesta del post
+
+        Mono<Account> resp2 = WebClient.create().post()
+                .uri(restUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(toAccMono,Account.class)
+                .retrieve().bodyToMono(Account.class);//respuesta del post
+
+        /*Generando transaccion -1*/
+        repositoryTra.save(Transaction.builder()
+                .transactionType(TransactionType.FUND_TRANSFER)
+                .fromAccount(fromAccount)
+                .toAccount(toAccount)
+                .transactionId(trxId)
+                .amount(amount.negate()).build());
+        repositoryTra.save(Transaction.builder()
+                .transactionType(TransactionType.FUND_TRANSFER)
+                .fromAccount(fromAccount)
+                .toAccount(toAccount)
+                .transactionId(trxId)
+                .amount(amount).build());
+        Transaction trx = Transaction.builder().transactionId(trxId).amount(amount).build();
+        return trx;
 
     }
 
     private void validateBalance(Account account, BigDecimal amount){
         if (account.getActualBalance().compareTo(BigDecimal.ZERO) < 0 || account.getActualBalance().compareTo(amount) < 0) {
-            throw new RuntimeException();
+            throw new ValidationException("Saldo muy bajo para efectuar transaccion");
         }
     }
 

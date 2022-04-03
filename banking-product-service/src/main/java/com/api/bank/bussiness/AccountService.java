@@ -8,6 +8,6 @@ import reactor.core.publisher.Mono;
 
 public interface AccountService {
     Maybe<ResponseEntity<Account>> findAccountbyNumber(String accountNumber);
-
+    Maybe<ResponseEntity<Account>> updateAccount(Account acc);
     Maybe<ResponseEntity<Account>> createAccount(Account acc);
 }

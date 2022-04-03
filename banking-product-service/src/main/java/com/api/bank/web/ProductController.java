@@ -39,6 +39,11 @@ public class ProductController {
         return accountService.createAccount(request);
     }
 
+    @PostMapping(value = "/account/updAccount")
+    public Maybe<ResponseEntity<Account>> updateAccount(@Valid @RequestBody(required = true)Account request){
+        return accountService.updateAccount(request);
+    }
+
     @PostMapping(value = "/credit/regCredit")
     public Maybe<ResponseEntity<Credit>> createCredit(@Valid @RequestBody(required = true)Credit request){
         return creditService.createCredit(request);

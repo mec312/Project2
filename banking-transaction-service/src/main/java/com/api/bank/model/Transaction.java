@@ -26,6 +26,10 @@ public class Transaction {
 
     @NotNull
     @Valid
+    private String transactionId;
+
+    @NotNull
+    @Valid
     private BigDecimal amount;
 
     @NotNull

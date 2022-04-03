@@ -5,6 +5,6 @@ import io.reactivex.Maybe;
 
 public interface AccountDao {
     Maybe<Account> findAccountByNumber(String accountNumber);
-
+    Maybe<Account> updateAccount(Account acc);
     Maybe<Account> createAccount(Account acc);
 }

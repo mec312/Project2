@@ -25,6 +25,10 @@ public class AccountServiceImpl implements AccountService {
 
     }
 
+    public Maybe<ResponseEntity<Account>> updateAccount(Account acc) {
+        return accountDao.updateAccount(acc).map(acct -> validaRespuesta(acct));
+    }
+
     public Maybe<ResponseEntity<Account>> createAccount(Account acc) {
         return accountDao.createAccount(acc).map(acct -> validaRespuesta(acct));
     }
