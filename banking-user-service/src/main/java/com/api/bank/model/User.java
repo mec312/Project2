@@ -11,35 +11,24 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Builder
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Document(value = "User")
-public class User {
+public class User implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
-    @Field("_id")
-    @JsonIgnore
     private String id;
-    @Valid
-    @NotNull
     private String firstName;
-    @Valid
-    @NotNull
     private String lastName;
-    @Valid
-    @NotNull
     private int age;
-    @Valid
-    @NotNull
     private String dni;
-    @Valid
-    @NotNull
     private UserStatus userStatus;
-    @Valid
-    @NotNull
     private UserType userType;
 }

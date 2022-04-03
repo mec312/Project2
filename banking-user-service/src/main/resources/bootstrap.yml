@@ -1,6 +1,10 @@
 server:
     port: 8084
 spring:
+    cache: redis
+    redis:
+        host: localhost
+        port: 6379
     application:
         name: banking-user-service
     cloud:
@@ -11,6 +15,7 @@ spring:
     data:
         mongodb:
             uri: mongodb+srv://xvris:xvris@cluster0.bpun4.mongodb.net/apibanca
+
 eureka:
     client:
         service-url:

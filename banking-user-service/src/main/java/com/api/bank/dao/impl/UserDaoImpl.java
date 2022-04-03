@@ -9,7 +9,11 @@ import io.reactivex.Maybe;
 import io.reactivex.Single;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
@@ -21,30 +25,26 @@ public class UserDaoImpl implements UserDao {
     private UserRepository repository;
 
     @Override
-    public Maybe<User> createUser(User uss){
+    public User createUser(User uss){
         Optional.ofNullable(repository.findByDni(uss.getDni()))
                 .ifPresent(u -> {
                     throw new ValidationException("El usuario ya existe");
                 });
-        return Maybe.just(repository.save(uss));
-
+        return repository.save(uss);
     }
 
     @Override
-    public Maybe<User> findByDni(String dni) {
-        return repository.findByDni(dni) != null
-                ? Maybe.just(repository.findByDni(dni))
-                : Maybe.empty();
+    @Transactional
+    @Cacheable(value = "user", key = "#dni")
+    public User findByDni(String dni) {
+        return repository.findByDni(dni);
     }
 
-    @Override
-    public Maybe<User> updateUser(String dni, UserStatus sta){
-        return findByDni(dni)
-                .map(user -> {
-                    user.setUserStatus(sta);
-                    repository.save(user);
-                    return user;
-                });
+    public User updateUser(String dni, UserStatus sta){
+        User us = findByDni(dni);
+        us.setUserStatus(sta);
+        repository.save(us);
+        return us;
     }
 }
 

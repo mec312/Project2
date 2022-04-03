@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/updUser")
-    public ResponseEntity updateUser(@RequestBody(required = true) String dni, @RequestBody(required = true)User uss) {
+    public ResponseEntity updateUser(@RequestBody(required = true) String dni, @RequestBody(required = true) User uss) {
         log.info("Updating user", uss.toString());
         return ResponseEntity.ok(userService.updateUser(dni, uss.getUserStatus()));
     }
@@ -44,9 +44,9 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex){
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error)->{
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);

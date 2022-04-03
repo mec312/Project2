@@ -5,12 +5,15 @@ import com.api.bank.internal.UserStatus;
 import com.api.bank.model.User;
 import io.reactivex.Maybe;
 import io.reactivex.Single;
+import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
+@Component
 public interface UserDao {
-    Maybe<User> createUser(User uss);
+    User createUser(User uss);
 
-    Maybe<User> findByDni(String dni);
+    User findByDni(String dni);
 
-    Maybe<User> updateUser(String dni, UserStatus sta);
+    User updateUser(String dni, UserStatus sta);
 
 }
