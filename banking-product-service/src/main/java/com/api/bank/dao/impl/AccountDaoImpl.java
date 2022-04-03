@@ -28,23 +28,21 @@ public class AccountDaoImpl implements AccountDao {
         return repository.findAccountByNumber(accountNumber);
     }
 
+    @Override
     public Maybe<Account> updateAccount(Account acc) {
-        Optional.ofNullable(Maybe.just(findAccountByNumber(acc.getNumber())))
-                .ifPresentOrElse(ac -> {
-                    ac.map(act ->{
-                        act.setActualBalance(acc.getActualBalance());
-                        act.setAvailableBalance(acc.getAvailableBalance());
-                        return repository.save(act);
-                    });
-                },() ->{
-                    throw new ValidationException("La cuenta no fue encontrada");
-                });
-
+        Optional.ofNullable(repository.findAccountByNumber(acc.getNumber()))
+                .ifPresentOrElse(account -> {
+                    account.setActualBalance(acc.getActualBalance());
+                    account.setAvailableBalance(acc.getAvailableBalance());
+                    repository.save(account);
+                        },
+                        () -> {throw new ValidationException("La cuenta no fue encontrada");});
         return repository.findAccountByNumber(acc.getNumber()) != null
                 ? Maybe.just(acc)
                 : Maybe.empty();
     }
 
+    @Override
     public Maybe<Account> createAccount(Account acc) {
         Optional.ofNullable(repository.findAccountByNumber(acc.getNumber()))
                 .ifPresent(u -> {
