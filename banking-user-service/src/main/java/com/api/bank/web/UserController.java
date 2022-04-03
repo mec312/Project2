@@ -3,7 +3,7 @@ package com.api.bank.web;
 import com.api.bank.bussiness.UserService;
 import com.api.bank.model.User;
 import io.reactivex.Maybe;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
-@Log4j2
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -37,9 +37,9 @@ public class UserController {
     }
 
     @PostMapping(value = "/updUser")
-    public ResponseEntity updateUser(@RequestBody(required = true) String dni, @RequestBody(required = true) User uss) {
+    public Maybe<ResponseEntity<User>> updateUser(@RequestBody(required = true) String dni, @RequestBody(required = true) User uss) {
         log.info("Updating user", uss.toString());
-        return ResponseEntity.ok(userService.updateUser(dni, uss.getUserStatus()));
+        return userService.updateUser(dni, uss.getUserStatus());
     }
 
     @GetMapping(value = "/findUserbyDni")

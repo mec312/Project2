@@ -20,20 +20,18 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionDao transactionDao;
 
     @Override
-    public ResponseEntity<Mono<Transaction>> PayTransaction(BigDecimal amount, String account){
-        Transaction trx = transactionDao.PayTransaction(amount,account);
-        return validaRespuesta(trx);
+    public Mono<ResponseEntity<Transaction>> PayTransaction(BigDecimal amount, String account){
+        return Mono.just(validaRespuesta(transactionDao.PayTransaction(amount,account)));
     }
 
     @Override
-    public ResponseEntity<Mono<Transaction>> FundTransferTransaction(String fromAccount, String toAccount, BigDecimal amount) {
-        Transaction trx = transactionDao.FundTransferTransaction(fromAccount,toAccount,amount);
-        return validaRespuesta(trx);
+    public Mono<ResponseEntity<Transaction>> FundTransferTransaction(String fromAccount, String toAccount, BigDecimal amount) {
+        return Mono.just(validaRespuesta(transactionDao.FundTransferTransaction(fromAccount,toAccount,amount)));
     }
 
-    private ResponseEntity<Mono<Transaction>> validaRespuesta(Transaction trx) {
+    private ResponseEntity<Transaction> validaRespuesta(Transaction trx) {
         return (trx!=null)
-                ? ResponseEntity.ok(Mono.just(trx))
+                ? ResponseEntity.ok(trx)
                 : ResponseEntity.noContent().build();
     }
 
