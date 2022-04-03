@@ -21,7 +21,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Maybe<ResponseEntity<Account>> findAccountbyNumber(String accountNumber) {
-        return accountDao.findAccountByNumber(accountNumber).map(acc -> validaRespuesta(acc));
+        return Maybe.just(accountDao.findAccountByNumber(accountNumber))
+                .map(acc -> validaRespuesta(acc));
 
     }
 

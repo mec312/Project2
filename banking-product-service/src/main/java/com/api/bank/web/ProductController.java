@@ -4,7 +4,6 @@ import com.api.bank.bussiness.AccountService;
 import com.api.bank.bussiness.CreditService;
 import com.api.bank.model.Account;
 import com.api.bank.model.Credit;
-import com.api.bank.model.User;
 import io.reactivex.Maybe;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -66,6 +71,4 @@ public class ProductController {
         });
         return errors;
     }
-
-
 }

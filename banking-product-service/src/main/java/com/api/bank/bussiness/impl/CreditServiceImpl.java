@@ -21,7 +21,8 @@ public class CreditServiceImpl implements CreditService {
 
     @Override
     public Maybe<ResponseEntity<Credit>> findCreditByNumber(String creditNumber) {
-        return creditDao.findCreditByNumber(creditNumber).map(cred ->validaRespuesta(cred));
+        return Maybe.just(creditDao.findCreditByNumber(creditNumber))
+                .map(cred ->validaRespuesta(cred));
     }
 
     public Maybe<ResponseEntity<Credit>> createCredit(Credit cre) {

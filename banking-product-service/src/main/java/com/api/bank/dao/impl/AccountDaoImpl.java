@@ -7,7 +7,9 @@ import com.api.bank.repository.AccountRepository;
 import io.reactivex.Maybe;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import javax.validation.ValidationException;
@@ -20,15 +22,14 @@ public class AccountDaoImpl implements AccountDao {
     private AccountRepository repository;
 
     @Override
-    public Maybe<Account> findAccountByNumber(String accountNumber) {
-        return repository.findAccountByNumber(accountNumber) != null
-                ? Maybe.just(repository.findAccountByNumber(accountNumber))
-                : Maybe.empty();
-
+    @Transactional
+    @Cacheable(value = "account", key = "#accountNumber")
+    public Account findAccountByNumber(String accountNumber) {
+        return repository.findAccountByNumber(accountNumber);
     }
+
     public Maybe<Account> updateAccount(Account acc) {
-        /*Revisar - no esta actualizando*/
-        Optional.ofNullable(findAccountByNumber(acc.getNumber()))
+        Optional.ofNullable(Maybe.just(findAccountByNumber(acc.getNumber())))
                 .ifPresentOrElse(ac -> {
                     ac.map(act ->{
                         act.setActualBalance(acc.getActualBalance());
@@ -45,7 +46,6 @@ public class AccountDaoImpl implements AccountDao {
     }
 
     public Maybe<Account> createAccount(Account acc) {
-        /*Revisar*/
         Optional.ofNullable(repository.findAccountByNumber(acc.getNumber()))
                 .ifPresent(u -> {
                     throw new ValidationException("La cuenta ya existe");

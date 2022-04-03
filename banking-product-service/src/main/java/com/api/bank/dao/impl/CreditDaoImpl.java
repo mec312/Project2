@@ -9,7 +9,9 @@ import com.api.bank.repository.CreditRepository;
 import io.reactivex.Maybe;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import javax.validation.ValidationException;
@@ -23,14 +25,13 @@ public class CreditDaoImpl implements CreditDao {
     private CreditRepository repository;
 
     @Override
-    public Maybe<Credit> findCreditByNumber(String creditNumber) {
-        return repository.findCreditByNumber(creditNumber) !=null
-                ? Maybe.just(repository.findCreditByNumber(creditNumber))
-                : Maybe.empty();
+    @Transactional
+    @Cacheable(value = "credit", key = "#creditNumber")
+    public Credit findCreditByNumber(String creditNumber) {
+        return repository.findCreditByNumber(creditNumber);
     }
 
     public Maybe<Credit> createCredit(Credit cre) {
-        /*Revisar*/
         Optional.ofNullable(repository.findCreditByNumber(cre.getNumber()))
                 .ifPresent(c->{
                     throw new ValidationException("La cuenta ya existe");
