@@ -26,7 +26,7 @@ public class Transaction implements Serializable {
     @Id
     private String id;
 
-    @NotNull
+    @Nullable
     @Valid
     private String transactionId;
 

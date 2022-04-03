@@ -25,8 +25,6 @@ public class TransactionDaoImpl implements TransactionDao {
     @Autowired
     private TransactionRepository repositoryTra;
 
-
-
     //tranferir fondos
     @Override
     public Transaction FundTransferTransaction(String fromAccount, String toAccount, BigDecimal amount){
