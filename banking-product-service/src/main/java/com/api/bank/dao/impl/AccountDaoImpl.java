@@ -26,6 +26,23 @@ public class AccountDaoImpl implements AccountDao {
                 : Maybe.empty();
 
     }
+    public Maybe<Account> updateAccount(Account acc) {
+        /*Revisar - no esta actualizando*/
+        Optional.ofNullable(findAccountByNumber(acc.getNumber()))
+                .ifPresentOrElse(ac -> {
+                    ac.map(act ->{
+                        act.setActualBalance(acc.getActualBalance());
+                        act.setAvailableBalance(acc.getAvailableBalance());
+                        return repository.save(act);
+                    });
+                },() ->{
+                    throw new ValidationException("La cuenta no fue encontrada");
+                });
+
+        return repository.findAccountByNumber(acc.getNumber()) != null
+                ? Maybe.just(acc)
+                : Maybe.empty();
+    }
 
     public Maybe<Account> createAccount(Account acc) {
         /*Revisar*/
@@ -43,11 +60,6 @@ public class AccountDaoImpl implements AccountDao {
         });
         return Maybe.just(acc);
 
-        /*
-        if (ussRes != null)
-            Maybe.just(repository.save(acc));
-        return Maybe.just(acc);
-        */
     }
 
 }
