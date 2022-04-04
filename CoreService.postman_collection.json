@@ -1,0 +1,268 @@
+{
+	"info": {
+		"_postman_id": "62bbeed3-20c2-4956-9320-7d58fab65e99",
+		"name": "CoreService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user/regUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Marlon E.\",\r\n    \"lastName\": \"Correa\",\r\n    \"age\": 30,\r\n    \"dni\": \"10715902201\",\r\n    \"userStatus\": \"APPROVED\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8084/user/regUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8084",
+					"path": [
+						"user",
+						"regUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/findUserbyDni",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8083/ms/cliente/user/findUserbyDni?dni=10715902202",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"ms",
+						"cliente",
+						"user",
+						"findUserbyDni"
+					],
+					"query": [
+						{
+							"key": "dni",
+							"value": "10715902202"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "account/regAccount",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"number\" : \"1234567891011\",\r\n    \"type\" : \"SAVINGS_ACCOUNT\",\r\n    \"status\" : \"ACTIVE\",\r\n    \"availableBalance\" : 2000052,\r\n    \"actualBalance\" : 2000052,\r\n    \"userDni\": \"10715902201\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/product/account/regAccount",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"product",
+						"account",
+						"regAccount"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "account/findAccountByNumber",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8085/product/account/findAccountByNumber?accountNumber=1234567891011",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"product",
+						"account",
+						"findAccountByNumber"
+					],
+					"query": [
+						{
+							"key": "accountNumber",
+							"value": "1234567891011"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "account/updAccount",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"number\" : \"1234567891011\",\r\n    \"type\" : \"SAVINGS_ACCOUNT\",\r\n    \"status\" : \"ACTIVE\",\r\n    \"availableBalance\" : 2000052,\r\n    \"actualBalance\" : 2000052,\r\n    \"userDni\": \"10715902201\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/product/account/updAccount",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"product",
+						"account",
+						"updAccount"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "credit/findCreditbyNumber",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8085/product/credit/findCreditByNumber?creditNumber=123456",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"product",
+						"credit",
+						"findCreditByNumber"
+					],
+					"query": [
+						{
+							"key": "creditNumber",
+							"value": "123456"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "credit/regCredit",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"number\" : \"123456\",\r\n    \"type\" : \"PERSONAL\",\r\n    \"status\" : \"ACTIVE\",\r\n    \"amount\" : 20000,\r\n    \"fees\" : 12,\r\n    \"user\": {\r\n        \"firstName\" : \"Marlon\",\r\n        \"lastName\" : \"Correa\",\r\n        \"age\" : 30,\r\n        \"dni\" : \"10715902201\",\r\n        \"status\" : \"APPROVED\",\r\n        \"type\" : \"VIP\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8085/product/credit/regCredit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8085",
+					"path": [
+						"product",
+						"credit",
+						"regCredit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "transaction/fundTransfer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": 20,\r\n    \"transactionType\": \"FUND_TRANSFER\",\r\n    \"fromAccount\": \"123456789\",\r\n    \"toAccount\": \"1234567891014\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8086/transaction/fundTransfer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"transaction",
+						"fundTransfer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "transaction/payment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": 2,\r\n    \"transactionType\": \"UTILITY_PAYMENT\",\r\n    \"fromAccount\": \"123456789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8086/transaction/payment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"transaction",
+						"payment"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

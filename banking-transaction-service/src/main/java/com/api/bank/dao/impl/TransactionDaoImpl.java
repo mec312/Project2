@@ -1,6 +1,7 @@
 package com.api.bank.dao.impl;
 
 import com.api.bank.dao.TransactionDao;
+import com.api.bank.exception.ValidationException;
 import com.api.bank.internal.TransactionType;
 import com.api.bank.model.Account;
 import com.api.bank.model.Transaction;
@@ -8,14 +9,10 @@ import com.api.bank.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
-import javax.validation.ValidationException;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
