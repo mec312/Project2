@@ -30,11 +30,11 @@ public class TransactionController {
     private TransactionService transactionService;
 
 
-    @CircuitBreaker(name = "transactionC",fallbackMethod ="subscribesFallbackMethod")
-    @RateLimiter(name = "transactionC")
-    @Bulkhead(name = "transactionC")
-    @Retry(name = "transactionC", fallbackMethod = "subscribesFallbackMethod")
-    @TimeLimiter(name = "transactionC")
+    @CircuitBreaker(name = "fundTransfer",fallbackMethod ="subscribesFallbackMethod")
+    @RateLimiter(name = "fundTransfer")
+    @Bulkhead(name = "fundTransfer")
+    @Retry(name = "fundTransfer", fallbackMethod = "subscribesFallbackMethod")
+    @TimeLimiter(name = "fundTransfer")
     @PostMapping(value = "/fundTransfer")
     public Maybe<ResponseEntity<Transaction>> FundTransferTransaction(@Valid @RequestBody Transaction trx) {
         return transactionService.FundTransferTransaction(trx.getFromAccount().getNumber(),
@@ -42,6 +42,11 @@ public class TransactionController {
                 trx.getAmount());
     }
 
+    @CircuitBreaker(name = "payment",fallbackMethod ="subscribesFallbackMethod")
+    @RateLimiter(name = "payment")
+    @Bulkhead(name = "payment")
+    @Retry(name = "payment", fallbackMethod = "subscribesFallbackMethod")
+    @TimeLimiter(name = "payment")
     @PostMapping(value = "/payment")
     public Maybe<ResponseEntity<Transaction>> PayTransaction(@Valid @RequestBody Transaction trx){
         log.info("Pagos - Inicio");
@@ -59,7 +64,8 @@ public class TransactionController {
         });
         return errors;
     }
-    //Circuit Breaker
+
+    //resilience4j
     public ResponseEntity<String> subscribesFallbackMethod(Exception e) {
         return new ResponseEntity<String>("Servicio esta caido, intente mas tarde", HttpStatus.OK);
     }

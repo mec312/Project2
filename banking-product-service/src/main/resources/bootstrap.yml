@@ -19,3 +19,118 @@ eureka:
     client:
         service-url:
             defaultZone: http://localhost:8082/eureka/
+
+resilience4j.circuitbreaker:
+    instances:
+        fundTransfer:
+            registerHealthIndicator: true
+            slidingWindowSize: 100
+        payment:
+            registerHealthIndicator: true
+            slidingWindowSize: 100
+
+resilience4j.retry:
+    instances:
+        fundTransfer:
+            maxAttempts: 3
+            waitDuration: 10s
+            enableExponentialBackoff: true
+            exponentialBackoffMultiplier: 2
+            retryExceptions:
+                - org.springframework.web.client.HttpServerErrorException
+                - java.io.IOException
+        payment:
+            maxAttempts: 3
+            waitDuration: 10s
+            enableExponentialBackoff: true
+            exponentialBackoffMultiplier: 2
+            retryExceptions:
+                - org.springframework.web.client.HttpServerErrorException
+                - java.io.IOException
+
+resilience4j.bulkhead:
+    instances:
+        findAccountByNumber:
+            maxConcurrentCalls: 10
+        createAccount:
+            maxConcurrentCalls: 10
+        updateAccount:
+            maxConcurrentCalls: 10
+        createCredit:
+            maxConcurrentCalls: 10
+        findCreditbyNumber:
+            maxConcurrentCalls: 10
+
+resilience4j.thread-pool-bulkhead:
+  instances:
+    findAccountByNumber:
+      maxThreadPoolSize: 1
+      coreThreadPoolSize: 1
+      queueCapacity: 1
+    createAccount:
+      maxThreadPoolSize: 1
+      coreThreadPoolSize: 1
+      queueCapacity: 1
+    updateAccount:
+      maxThreadPoolSize: 1
+      coreThreadPoolSize: 1
+      queueCapacity: 1
+    createCredit:
+      maxThreadPoolSize: 1
+      coreThreadPoolSize: 1
+      queueCapacity: 1
+    findCreditbyNumber:
+      maxThreadPoolSize: 1
+      coreThreadPoolSize: 1
+      queueCapacity: 1
+
+resilience4j.ratelimiter:
+    instances:
+        findAccountByNumber:
+            limitForPeriod: 10
+            limitRefreshPeriod: 1s
+            timeoutDuration: 0
+            registerHealthIndicator: true
+            eventConsumerBufferSize: 100
+        createAccount:
+            limitForPeriod: 10
+            limitRefreshPeriod: 1s
+            timeoutDuration: 0
+            registerHealthIndicator: true
+            eventConsumerBufferSize: 100
+        updateAccount:
+            limitForPeriod: 10
+            limitRefreshPeriod: 1s
+            timeoutDuration: 0
+            registerHealthIndicator: true
+            eventConsumerBufferSize: 100
+        createCredit:
+            limitForPeriod: 10
+            limitRefreshPeriod: 1s
+            timeoutDuration: 0
+            registerHealthIndicator: true
+            eventConsumerBufferSize: 100
+        findCreditbyNumber:
+            limitForPeriod: 10
+            limitRefreshPeriod: 1s
+            timeoutDuration: 0
+            registerHealthIndicator: true
+            eventConsumerBufferSize: 100
+
+resilience4j.timelimiter:
+    instances:
+        findAccountByNumber:
+            timeoutDuration: 2s
+            cancelRunningFuture: true
+        createAccount:
+            timeoutDuration: 2s
+            cancelRunningFuture: true
+        updateAccount:
+            timeoutDuration: 2s
+            cancelRunningFuture: true
+        createCredit:
+            timeoutDuration: 2s
+            cancelRunningFuture: true
+        findCreditbyNumber:
+            timeoutDuration: 2s
+            cancelRunningFuture: true

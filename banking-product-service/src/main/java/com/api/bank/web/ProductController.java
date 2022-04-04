@@ -4,6 +4,11 @@ import com.api.bank.bussiness.AccountService;
 import com.api.bank.bussiness.CreditService;
 import com.api.bank.model.Account;
 import com.api.bank.model.Credit;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import io.reactivex.Maybe;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,27 +38,51 @@ public class ProductController {
     @Autowired
     private CreditService creditService;
 
+    @CircuitBreaker(name = "findAccountByNumber",fallbackMethod ="subscribesFallbackMethod")
+    @RateLimiter(name = "findAccountByNumber")
+    @Bulkhead(name = "findAccountByNumber")
+    @Retry(name = "findAccountByNumber", fallbackMethod = "subscribesFallbackMethod")
+    @TimeLimiter(name = "findAccountByNumber")
     @GetMapping(value = "/account/findAccountByNumber")
     public Maybe<ResponseEntity<Account>> findAccountByNumber(@RequestParam(required = true) String accountNumber) {
         return accountService.findAccountbyNumber(accountNumber);
     }
 
+    @CircuitBreaker(name = "createAccount",fallbackMethod ="subscribesFallbackMethod")
+    @RateLimiter(name = "createAccount")
+    @Bulkhead(name = "createAccount")
+    @Retry(name = "createAccount", fallbackMethod = "subscribesFallbackMethod")
+    @TimeLimiter(name = "createAccount")
     @PostMapping(value = "/account/regAccount")
     public Maybe<ResponseEntity<Account>> createAccount(@Valid @RequestBody Account request) {
         log.info("Creating account with {}", request.toString());
         return accountService.createAccount(request);
     }
 
+    @CircuitBreaker(name = "updateAccount",fallbackMethod ="subscribesFallbackMethod")
+    @RateLimiter(name = "updateAccount")
+    @Bulkhead(name = "updateAccount")
+    @Retry(name = "updateAccount", fallbackMethod = "subscribesFallbackMethod")
+    @TimeLimiter(name = "updateAccount")
     @PostMapping(value = "/account/updAccount")
     public Maybe<ResponseEntity<Account>> updateAccount(@Valid @RequestBody(required = true)Account request){
         return accountService.updateAccount(request);
     }
 
+    @CircuitBreaker(name = "createCredit",fallbackMethod ="subscribesFallbackMethod")
+    @RateLimiter(name = "createCredit")
+    @Bulkhead(name = "createCredit")
+    @Retry(name = "createCredit", fallbackMethod = "subscribesFallbackMethod")
+    @TimeLimiter(name = "createCredit")
     @PostMapping(value = "/credit/regCredit")
     public Maybe<ResponseEntity<Credit>> createCredit(@Valid @RequestBody(required = true)Credit request){
         return creditService.createCredit(request);
     }
-
+    @CircuitBreaker(name = "findCreditbyNumber",fallbackMethod ="subscribesFallbackMethod")
+    @RateLimiter(name = "findCreditbyNumber")
+    @Bulkhead(name = "findCreditbyNumber")
+    @Retry(name = "findCreditbyNumber", fallbackMethod = "subscribesFallbackMethod")
+    @TimeLimiter(name = "findCreditbyNumber")
     @GetMapping(value = "/credit/findCreditByNumber")
     public Maybe<ResponseEntity<Credit>> findCreditbyNumber(@Valid @RequestParam(required = true) String creditNumber) {
         log.info("Reading user by id {}", creditService.findCreditByNumber(creditNumber));
@@ -70,5 +99,10 @@ public class ProductController {
             errors.put(fieldName, errorMessage);
         });
         return errors;
+    }
+
+    //resilience4j
+    public ResponseEntity<String> subscribesFallbackMethod(Exception e) {
+        return new ResponseEntity<String>("Servicio esta caido, intente mas tarde", HttpStatus.OK);
     }
 }

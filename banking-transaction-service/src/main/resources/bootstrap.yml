@@ -18,13 +18,24 @@ eureka:
 
 resilience4j.circuitbreaker:
     instances:
-        transactionC:
+        fundTransfer:
+            registerHealthIndicator: true
+            slidingWindowSize: 100
+        payment:
             registerHealthIndicator: true
             slidingWindowSize: 100
 
 resilience4j.retry:
     instances:
-        transactionC:
+        fundTransfer:
+            maxAttempts: 3
+            waitDuration: 10s
+            enableExponentialBackoff: true
+            exponentialBackoffMultiplier: 2
+            retryExceptions:
+                - org.springframework.web.client.HttpServerErrorException
+                - java.io.IOException
+        payment:
             maxAttempts: 3
             waitDuration: 10s
             enableExponentialBackoff: true
@@ -35,19 +46,31 @@ resilience4j.retry:
 
 resilience4j.bulkhead:
     instances:
-        transactionC:
+        fundTransfer:
+            maxConcurrentCalls: 10
+        payment:
             maxConcurrentCalls: 10
 
 resilience4j.thread-pool-bulkhead:
   instances:
-    transactionC:
+    fundTransfer:
+      maxThreadPoolSize: 1
+      coreThreadPoolSize: 1
+      queueCapacity: 1
+    payment:
       maxThreadPoolSize: 1
       coreThreadPoolSize: 1
       queueCapacity: 1
 
 resilience4j.ratelimiter:
     instances:
-        transactionC:
+        fundTransfer:
+            limitForPeriod: 10
+            limitRefreshPeriod: 1s
+            timeoutDuration: 0
+            registerHealthIndicator: true
+            eventConsumerBufferSize: 100
+        payment:
             limitForPeriod: 10
             limitRefreshPeriod: 1s
             timeoutDuration: 0
@@ -56,6 +79,9 @@ resilience4j.ratelimiter:
 
 resilience4j.timelimiter:
     instances:
-        transactionC:
+        fundTransfer:
+            timeoutDuration: 2s
+            cancelRunningFuture: true
+        payment:
             timeoutDuration: 2s
             cancelRunningFuture: true
