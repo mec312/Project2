@@ -80,10 +80,10 @@ public class TransactionDaoImpl implements TransactionDao {
         String trxId = UUID.randomUUID().toString();//cambiar
 
         fromAccount.setActualBalance(fromAccount.getActualBalance().subtract(amount));
-        fromAccount.setAvailableBalance(fromAccount.getActualBalance().subtract(amount));
+        fromAccount.setAvailableBalance(fromAccount.getAvailableBalance().subtract(amount));
 
         toAccount.setActualBalance(toAccount.getActualBalance().add(amount));
-        toAccount.setAvailableBalance(toAccount.getActualBalance().add(amount));
+        toAccount.setAvailableBalance(toAccount.getAvailableBalance().add(amount));
 
         /*ANTIGUO - Actualizar Saldo en cuenta- FUNCIONA */
         RestTemplate restT = new RestTemplate();
