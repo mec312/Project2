@@ -71,8 +71,9 @@ public class YankiDaoImpl implements YankiDao {
         Transaction trx = FundTransferYanki(ChosenAccount, YankiAccount, chAcc.getActualBalance());
 
         //Actualizar estado de la cuenta vaciada
-
-
+        String uri2 ="http://localhost:8085/product/account/updAccount";
+        chAcc.setStatus(AccountStatus.BLOCKED);
+        Account accYanki  = restT.postForObject(uri2, chAcc, Account.class);
 
         return trx;
     }
