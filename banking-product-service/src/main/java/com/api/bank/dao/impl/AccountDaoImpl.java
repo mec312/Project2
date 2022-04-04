@@ -2,6 +2,7 @@ package com.api.bank.dao.impl;
 
 import com.api.bank.dao.AccountDao;
 import com.api.bank.exception.ValidationException;
+import com.api.bank.internal.AccountStatus;
 import com.api.bank.model.Account;
 import com.api.bank.model.User;
 import com.api.bank.repository.AccountRepository;
@@ -31,6 +32,7 @@ public class AccountDaoImpl implements AccountDao {
     public Maybe<Account> updateAccount(Account acc) {
         Optional.ofNullable(repository.findAccountByNumber(acc.getNumber()))
                 .ifPresentOrElse(account -> {
+                    account.setStatus(acc.getStatus());
                     account.setActualBalance(acc.getActualBalance());
                     account.setAvailableBalance(acc.getAvailableBalance());
                     repository.save(account);

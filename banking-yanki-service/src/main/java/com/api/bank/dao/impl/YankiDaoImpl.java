@@ -64,7 +64,16 @@ public class YankiDaoImpl implements YankiDao {
     }
 
     @Override
-    public Transaction MembershipYanki(String fromAccount, BigDecimal amount){
-        return null;
+    public Transaction MembershipYanki(String YankiAccount, String ChosenAccount){
+        RestTemplate restT = new RestTemplate();
+        String uri ="http://localhost:8085/product/account/findAccountByNumber?accountNumber=";
+        Account chAcc = restT.getForObject(uri+ChosenAccount,Account.class, Account.class);
+        Transaction trx = FundTransferYanki(ChosenAccount, YankiAccount, chAcc.getActualBalance());
+
+        //Actualizar estado de la cuenta vaciada
+
+
+
+        return trx;
     }
 }

@@ -9,5 +9,5 @@ public interface YankiDao {
     User createUserYanki(User uss);
     Transaction FundTransferYanki(String fromAccount, String toAccount, BigDecimal amount);
     Transaction PayYanki(String fromAccount, BigDecimal amount);
-    Transaction MembershipYanki(String fromAccount, BigDecimal amount);
+    Transaction MembershipYanki(String YankiAccount, String ChosenAccount);
 }
