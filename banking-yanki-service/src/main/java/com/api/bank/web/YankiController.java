@@ -1,6 +1,7 @@
 package com.api.bank.web;
 
 import com.api.bank.bussiness.YankiService;
+import com.api.bank.model.MemberShip;
 import com.api.bank.model.Transaction;
 import com.api.bank.model.User;
 import io.reactivex.Maybe;
@@ -42,10 +43,14 @@ public class YankiController {
                 trx.getAmount());
     }
 
-    @PostMapping(value = "/membershipYanki")
+
+    //@RequestMapping(value = "/memberYanki", method = RequestMethod.POST)
+    @PostMapping(value = "/memberYanki")
     @ResponseBody
-    public Maybe<ResponseEntity<Transaction>> membershipYanki(@RequestParam(required = false, name="yankiaccount") String yankiaccount,  @RequestParam(required = false, name="chosenaccount") String chosenaccount) {
-        return yankiService.MembershipYanki(yankiaccount, chosenaccount);
+    public Maybe<ResponseEntity<Transaction>> membershipYanki(@Valid @RequestBody MemberShip mbs) {
+        log.info("yankiaccount: "+ mbs.getYankiaccount());
+        log.info("chosenaccount: "+ mbs.getChosenaccount());
+        return yankiService.MembershipYanki(mbs.getYankiaccount(), mbs.getChosenaccount());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

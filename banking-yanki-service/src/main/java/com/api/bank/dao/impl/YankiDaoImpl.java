@@ -80,12 +80,14 @@ public class YankiDaoImpl implements YankiDao {
         Account chAcc = restT.getForObject(uri+ChosenAccount,Account.class, Account.class);
 
         Transaction trx = FundTransferYanki(ChosenAccount, YankiAccount, chAcc.getActualBalance());
-/*
+        chAcc.setActualBalance(new BigDecimal(0));
+        chAcc.setAvailableBalance(new BigDecimal(0));
+
         //Actualizar estado de la cuenta vaciada
         String uri2 ="http://localhost:8085/product/account/updAccount";
         chAcc.setStatus(AccountStatus.BLOCKED);
         Account accYanki  = restT.postForObject(uri2, chAcc, Account.class);
-*/
+
         return trx;
     }
 }
