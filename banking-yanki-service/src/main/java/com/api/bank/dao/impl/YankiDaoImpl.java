@@ -6,6 +6,8 @@ import com.api.bank.model.Account;
 import com.api.bank.model.Transaction;
 import com.api.bank.model.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,6 +15,7 @@ import java.math.BigDecimal;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class YankiDaoImpl implements YankiDao {
 
     @Override
@@ -73,14 +76,16 @@ public class YankiDaoImpl implements YankiDao {
     public Transaction MembershipYanki(String YankiAccount, String ChosenAccount){
         RestTemplate restT = new RestTemplate();
         String uri ="http://localhost:8085/product/account/findAccountByNumber?accountNumber=";
+        log.info("uri+ChosenAccount:"+uri+ChosenAccount );
         Account chAcc = restT.getForObject(uri+ChosenAccount,Account.class, Account.class);
-        Transaction trx = FundTransferYanki(ChosenAccount, YankiAccount, chAcc.getActualBalance());
 
+        Transaction trx = FundTransferYanki(ChosenAccount, YankiAccount, chAcc.getActualBalance());
+/*
         //Actualizar estado de la cuenta vaciada
         String uri2 ="http://localhost:8085/product/account/updAccount";
         chAcc.setStatus(AccountStatus.BLOCKED);
         Account accYanki  = restT.postForObject(uri2, chAcc, Account.class);
-
+*/
         return trx;
     }
 }

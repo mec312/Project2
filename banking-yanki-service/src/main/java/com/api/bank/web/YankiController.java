@@ -7,10 +7,7 @@ import io.reactivex.Maybe;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -40,13 +37,11 @@ public class YankiController {
                 trx.getAmount());
     }
 
-    /*
     @PostMapping(value = "/membershipYanki")
-    public Maybe<ResponseEntity<Transaction>> membershipYanki(@Valid @RequestBody Transaction trx) {
-        return yankiService.MembershipYanki(trx.getFromAccount(),
-                trx.getToAccount(),
-                trx.getAmount());
+    @ResponseBody
+    public Maybe<ResponseEntity<Transaction>> membershipYanki(@RequestParam(required = false, name="yankiaccount") String yankiaccount,  @RequestParam(required = false, name="chosenaccount") String chosenaccount) {
+        return yankiService.MembershipYanki(yankiaccount, chosenaccount);
     }
-    */
+
 
 }
