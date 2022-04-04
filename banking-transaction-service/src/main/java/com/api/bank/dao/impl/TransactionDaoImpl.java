@@ -52,7 +52,7 @@ public class TransactionDaoImpl implements TransactionDao {
         validateBalance(fromAcc, amount);
         /*Seteando nuevos valores*/
         fromAcc.setActualBalance(fromAcc.getActualBalance().subtract(amount));
-        fromAcc.setAvailableBalance(fromAcc.getActualBalance().subtract(amount));
+        fromAcc.setAvailableBalance(fromAcc.getAvailableBalance().subtract(amount));
         /*ANTIGUO - Actualizar Saldo en cuenta- FUNCIONA */
         String uri2 ="http://localhost:8085/product/account/updAccount";
         Account fromAc = restT.postForObject(uri2,fromAcc, Account.class);

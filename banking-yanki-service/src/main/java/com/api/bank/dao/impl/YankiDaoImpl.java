@@ -48,8 +48,9 @@ public class YankiDaoImpl implements YankiDao {
                 .amount(amount)
                 .fromAccount(fromAccount)
                 .toAccount(toAccount)
-                .transactionType(TransactionType.FUNDTRANSFER_Y)
+                .transactionType(TransactionType.FUND_YANKI)
                 .build();
+
         Transaction trxYanki  = restT.postForObject(uri, trx, Transaction.class);
         return trxYanki;
     }
@@ -57,13 +58,14 @@ public class YankiDaoImpl implements YankiDao {
     @Override
     public Transaction PayYanki(String fromAccount, BigDecimal amount){
         RestTemplate restT = new RestTemplate();
-        String uri ="http://localhost:8086/transaction/payment";
+
+        String uri2 ="http://localhost:8086/transaction/payment";
         Transaction trx = Transaction.builder()
                 .amount(amount)
                 .fromAccount(fromAccount)
-                .transactionType(TransactionType.UTILITYPAYMENT_Y)
+                .transactionType(TransactionType.PAYMENT_YANKI)
                 .build();
-        Transaction trxYanki  = restT.postForObject(uri, trx, Transaction.class);
+        Transaction trxYanki  = restT.postForObject(uri2, trx, Transaction.class);
         return trxYanki;
     }
 
