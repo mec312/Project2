@@ -1,16 +1,18 @@
 package com.api.bank.dao.impl;
 
 import com.api.bank.dao.YankiDao;
-import com.api.bank.internal.AccountStatus;
-import com.api.bank.internal.AccountType;
-import com.api.bank.internal.TransactionType;
+import com.api.bank.internal.*;
 import com.api.bank.model.Account;
 import com.api.bank.model.Transaction;
 import com.api.bank.model.User;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 
+@RequiredArgsConstructor
+@Service
 public class YankiDaoImpl implements YankiDao {
 
     @Override
@@ -20,6 +22,8 @@ public class YankiDaoImpl implements YankiDao {
         User userYanki  = restT.postForObject(uri,uss, User.class);
         User uYanki = User.builder().dni(userYanki.getDni())
                 .cellphoneImei(userYanki.getCellphoneImei())
+                .userType(UserType.USER_YANKI)
+                .userStatus(UserStatus.APPROVED)
                 .cellphoneNumber(userYanki.getCellphoneNumber())
                 .email(userYanki.getEmail()).build();
 
