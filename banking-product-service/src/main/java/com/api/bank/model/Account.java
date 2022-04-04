@@ -53,5 +53,5 @@ public class Account implements Serializable {
 
     @NotNull
     @Valid
-    private User user;
+    private String userDni;
 }

@@ -40,10 +40,10 @@ public class Transaction implements Serializable {
 
     @NotNull
     @Valid
-    private Account fromAccount;
+    private String fromAccount;
 
     @Nullable
     @Valid
-    private Account toAccount;
+    private String toAccount;
 
 }

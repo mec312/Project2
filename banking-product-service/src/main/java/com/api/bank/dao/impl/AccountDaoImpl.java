@@ -49,7 +49,7 @@ public class AccountDaoImpl implements AccountDao {
                 .ifPresentOrElse(u -> {
                     throw new ValidationException("La cuenta ya existe");
                 }, () -> {
-                    String uri = "http://localhost:8084/user/findUserbyDni?dni=" + acc.getUser().getDni();
+                    String uri = "http://localhost:8084/user/findUserbyDni?dni=" + acc.getUserDni();
                     RestTemplate restT = new RestTemplate();
                     User ussRes = restT.getForObject(uri, User.class, User.class);
 

@@ -32,6 +32,7 @@ public class TransactionDaoImpl implements TransactionDao {
     public Transaction FundTransferTransaction(String fromAccount, String toAccount, BigDecimal amount){
         RestTemplate restT = new RestTemplate();
         String uri ="http://localhost:8085/product/account/findAccountByNumber?accountNumber=";
+
         Account fromAcc = restT.getForObject(uri+fromAccount,Account.class, Account.class);
         Account toAcc = restT.getForObject(uri+toAccount,Account.class, Account.class);
 
@@ -45,6 +46,7 @@ public class TransactionDaoImpl implements TransactionDao {
     @Override
     public Transaction PayTransaction(BigDecimal amount,String account){
         String trxId = UUID.randomUUID().toString();//cambiar
+
         RestTemplate restT = new RestTemplate();
         String uri ="http://localhost:8085/product/account/findAccountByNumber?accountNumber=";
         Account fromAcc = restT.getForObject(uri+account,Account.class, Account.class);
@@ -54,8 +56,12 @@ public class TransactionDaoImpl implements TransactionDao {
         /*Seteando nuevos valores*/
         fromAcc.setActualBalance(fromAcc.getActualBalance().subtract(amount));
         fromAcc.setAvailableBalance(fromAcc.getActualBalance().subtract(amount));
-        /*Actualizar Saldo en cuenta- aun sin implementar*/
+        /*ANTIGUO - Actualizar Saldo en cuenta- FUNCIONA */
+        String uri2 ="http://localhost:8085/product/account/updAccount";
+        Account fromAc = restT.postForObject(uri2,fromAcc, Account.class);
 
+        /*NUEVO - Actualizar Saldo en cuenta- NO FUNCIONA */
+/*
         String restUrl = "http://localhost:8085/product/account/updateAccount";
         Mono<Account> fromAccMono = Mono.just(fromAcc);
         Mono<Account> resp = WebClient.create().post()
@@ -63,9 +69,9 @@ public class TransactionDaoImpl implements TransactionDao {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(fromAccMono,Account.class)
                 .retrieve().bodyToMono(Account.class);//respuesta del post
-
+*/
         /*Generando transaccion*/
-        Transaction trx = repositoryTra.save(Transaction.builder().transactionType(TransactionType.UTILITY_PAYMENT).fromAccount(fromAcc).amount(amount.negate()).build());
+        Transaction trx = repositoryTra.save(Transaction.builder().transactionId(trxId).transactionType(TransactionType.UTILITY_PAYMENT).fromAccount(fromAcc.getNumber()).amount(amount.negate()).build());
         return trx;
 
     }
@@ -78,13 +84,17 @@ public class TransactionDaoImpl implements TransactionDao {
 
         toAccount.setActualBalance(toAccount.getActualBalance().add(amount));
         toAccount.setAvailableBalance(toAccount.getActualBalance().add(amount));
-        /*Actualizar Saldo en cuenta- aun sin implementar -1*/
 
+        /*ANTIGUO - Actualizar Saldo en cuenta- FUNCIONA */
+        RestTemplate restT = new RestTemplate();
+        String uri ="http://localhost:8085/product/account/updAccount";
+        Account fromAcc = restT.postForObject(uri,fromAccount, Account.class);
+        Account toAcc = restT.postForObject(uri,toAccount, Account.class);
+
+        /*NUEVO - Actualizar Saldo en cuenta- NO FUNCIONA */
+/*
         Mono<Account> fromAccMono = Mono.just(fromAccount);
         Mono<Account> toAccMono = Mono.just(toAccount);
-
-        log.info("Creating resp1 with {}", fromAccount.getActualBalance().toString());
-        log.info("Creating resp2 with {}", toAccount.getActualBalance().toString());
 
         WebClient webClient = WebClient.create("http://localhost:8085/product");
 
@@ -101,22 +111,22 @@ public class TransactionDaoImpl implements TransactionDao {
                 .body(toAccMono,Account.class)
                 .retrieve()
                 .bodyToMono(Account.class);//respuesta del post
-
+*/
         /*Generando transaccion -1*/
         repositoryTra.save(Transaction.builder()
                 .transactionType(TransactionType.FUND_TRANSFER)
-                .fromAccount(fromAccount)
-                .toAccount(toAccount)
+                .fromAccount(fromAccount.getNumber())
+                .toAccount(toAccount.getNumber())
                 .transactionId(trxId)
                 .amount(amount.negate()).build());
 
         repositoryTra.save(Transaction.builder()
                 .transactionType(TransactionType.FUND_TRANSFER)
-                .fromAccount(fromAccount)
-                .toAccount(toAccount)
+                .fromAccount(fromAccount.getNumber())
+                .toAccount(toAccount.getNumber())
                 .transactionId(trxId)
                 .amount(amount).build());
-        Transaction trx = Transaction.builder().transactionId(trxId).amount(amount).transactionType(TransactionType.FUND_TRANSFER).build();
+        Transaction trx = Transaction.builder().transactionId(trxId).amount(amount).transactionType(TransactionType.FUND_TRANSFER).toAccount(toAccount.getNumber()).fromAccount(fromAccount.getNumber()).build();
         return trx;
 
     }

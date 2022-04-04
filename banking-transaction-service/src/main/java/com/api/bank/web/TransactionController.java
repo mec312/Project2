@@ -2,7 +2,7 @@ package com.api.bank.web;
 
 import com.api.bank.bussiness.TransactionService;
 import com.api.bank.model.Transaction;
-import com.api.bank.model.User;
+
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -37,8 +37,8 @@ public class TransactionController {
     @TimeLimiter(name = "fundTransfer")
     @PostMapping(value = "/fundTransfer")
     public Maybe<ResponseEntity<Transaction>> FundTransferTransaction(@Valid @RequestBody Transaction trx) {
-        return transactionService.FundTransferTransaction(trx.getFromAccount().getNumber(),
-                trx.getToAccount().getNumber(),
+        return transactionService.FundTransferTransaction(trx.getFromAccount(),
+                trx.getToAccount(),
                 trx.getAmount());
     }
 
@@ -50,7 +50,7 @@ public class TransactionController {
     @PostMapping(value = "/payment")
     public Maybe<ResponseEntity<Transaction>> PayTransaction(@Valid @RequestBody Transaction trx){
         log.info("Pagos - Inicio");
-        return transactionService.PayTransaction(trx.getAmount(), trx.getFromAccount().getNumber());
+        return transactionService.PayTransaction(trx.getAmount(), trx.getFromAccount());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
