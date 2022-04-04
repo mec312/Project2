@@ -6,6 +6,7 @@ import com.api.bank.model.Account;
 import com.api.bank.model.Transaction;
 import com.api.bank.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -18,6 +19,7 @@ import javax.validation.ValidationException;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class TransactionDaoImpl implements TransactionDao {
@@ -78,21 +80,27 @@ public class TransactionDaoImpl implements TransactionDao {
         toAccount.setAvailableBalance(toAccount.getActualBalance().add(amount));
         /*Actualizar Saldo en cuenta- aun sin implementar -1*/
 
-        String restUrl = "http://localhost:8085/product/account/updateAccount";
         Mono<Account> fromAccMono = Mono.just(fromAccount);
         Mono<Account> toAccMono = Mono.just(toAccount);
 
-        Mono<Account> resp1 = WebClient.create().post()
-                .uri(restUrl)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(fromAccMono,Account.class)
-                .retrieve().bodyToMono(Account.class);//respuesta del post
+        log.info("Creating resp1 with {}", fromAccount.getActualBalance().toString());
+        log.info("Creating resp2 with {}", toAccount.getActualBalance().toString());
 
-        Mono<Account> resp2 = WebClient.create().post()
-                .uri(restUrl)
-                .contentType(MediaType.APPLICATION_JSON)
+        WebClient webClient = WebClient.create("http://localhost:8085/product");
+
+        Mono<Account> resp1 = webClient.post()
+                .uri("/account/updateAccount")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .body(fromAccMono,Account.class)
+                .retrieve()
+                .bodyToMono(Account.class);//respuesta del post
+
+        Mono<Account> resp2 = webClient.post()
+                .uri("/account/updateAccount")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .body(toAccMono,Account.class)
-                .retrieve().bodyToMono(Account.class);//respuesta del post
+                .retrieve()
+                .bodyToMono(Account.class);//respuesta del post
 
         /*Generando transaccion -1*/
         repositoryTra.save(Transaction.builder()
@@ -101,13 +109,14 @@ public class TransactionDaoImpl implements TransactionDao {
                 .toAccount(toAccount)
                 .transactionId(trxId)
                 .amount(amount.negate()).build());
+
         repositoryTra.save(Transaction.builder()
                 .transactionType(TransactionType.FUND_TRANSFER)
                 .fromAccount(fromAccount)
                 .toAccount(toAccount)
                 .transactionId(trxId)
                 .amount(amount).build());
-        Transaction trx = Transaction.builder().transactionId(trxId).amount(amount).build();
+        Transaction trx = Transaction.builder().transactionId(trxId).amount(amount).transactionType(TransactionType.FUND_TRANSFER).build();
         return trx;
 
     }
