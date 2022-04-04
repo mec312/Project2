@@ -46,11 +46,11 @@ public class UserController {
         return userService.createUser(request);
     }
 
-    @CircuitBreaker(name = "fundTransfer",fallbackMethod ="subscribesFallbackMethod")
-    @RateLimiter(name = "fundTransfer")
-    @Bulkhead(name = "fundTransfer")
-    @Retry(name = "fundTransfer", fallbackMethod = "subscribesFallbackMethod")
-    @TimeLimiter(name = "fundTransfer")
+    @CircuitBreaker(name = "updUser",fallbackMethod ="subscribesFallbackMethod")
+    @RateLimiter(name = "updUser")
+    @Bulkhead(name = "updUser")
+    @Retry(name = "updUser", fallbackMethod = "subscribesFallbackMethod")
+    @TimeLimiter(name = "updUser")
     @PostMapping(value = "/updUser")
     public Maybe<ResponseEntity<User>> updateUser(@RequestBody(required = true) String dni, @RequestBody(required = true) User uss) {
         log.info("Updating user", uss.toString());

@@ -2,16 +2,9 @@ package com.api.bank.model;
 
 import com.api.bank.internal.UserStatus;
 import com.api.bank.internal.UserType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.lang.Nullable;
 
 import javax.validation.Valid;

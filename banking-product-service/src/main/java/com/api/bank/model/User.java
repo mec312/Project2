@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.lang.Nullable;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -26,21 +27,32 @@ public class User {
     @JsonIgnore
     private String id;
     @Valid
-    @NotNull
+    @Nullable
     private String firstName;
     @Valid
-    @NotNull
+    @Nullable
     private String lastName;
     @Valid
-    @NotNull
+    @Nullable
     private int age;
+
     @Valid
     @NotNull
     private String dni;
     @Valid
     @NotNull
-    private UserStatus status;
+    private String cellphoneNumber;
     @Valid
     @NotNull
-    private UserType type;
+    private String cellphoneImei;
+    @Valid
+    @NotNull
+    private String email;
+
+    @Valid
+    @Nullable
+    private UserStatus userStatus;
+    @Valid
+    @Nullable
+    private UserType userType;
 }
