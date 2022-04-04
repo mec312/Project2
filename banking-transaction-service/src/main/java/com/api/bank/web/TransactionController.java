@@ -3,6 +3,7 @@ package com.api.bank.web;
 import com.api.bank.bussiness.TransactionService;
 import com.api.bank.model.Transaction;
 import com.api.bank.model.User;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.reactivex.Maybe;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
+    @CircuitBreaker(name = "transactionC",fallbackMethod ="subscribesFallbackMethod")
     @PostMapping(value = "/fundTransfer")
     public Maybe<ResponseEntity<Transaction>> FundTransferTransaction(@Valid @RequestBody Transaction trx) {
         return transactionService.FundTransferTransaction(trx.getFromAccount().getNumber(),
@@ -48,4 +50,9 @@ public class TransactionController {
         });
         return errors;
     }
+    //Circuit Breaker
+    public ResponseEntity<String> subscribesFallbackMethod(Exception e) {
+        return new ResponseEntity<String>("subscribe service is down", HttpStatus.OK);
+    }
+
 }
