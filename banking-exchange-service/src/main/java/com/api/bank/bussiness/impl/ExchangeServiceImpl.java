@@ -19,12 +19,12 @@ public class ExchangeServiceImpl implements ExchangeService {
 
     @Override
     public Maybe<ResponseEntity<Exchange>> createExchange(Exchange request){
-        return null;
+        return exchangeDao.createExchange(request).map(rq->validaRespuesta(rq));
     }
 
     @Override
     public Maybe<ResponseEntity<Exchange>> findExchange(ExchangeRequest request){
-        return null;
+        return Maybe.just(exchangeDao.findExchange(request)).map(rq->validaRespuesta(rq));
     }
 
     private ResponseEntity<Exchange> validaRespuesta(Exchange ex) {
