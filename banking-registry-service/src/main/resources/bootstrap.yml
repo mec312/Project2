@@ -10,3 +10,8 @@ spring:
             discovery:
                 locator:
                     enabled: true
+
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false

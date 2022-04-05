@@ -1,6 +1,6 @@
 spring:
   application:
-    name: apigateway
+    name: banking-gateway-service
   cloud:
     gateway:
       routes:

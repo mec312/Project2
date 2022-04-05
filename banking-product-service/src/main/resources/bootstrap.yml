@@ -1,10 +1,11 @@
 spring:
+    application:
+        name: banking-product-service
     cloud:
         config:
             uri: http://localhost:8081
             username: nttdata
             password: nttd4t4
-    data:
 
 eureka:
     client:
