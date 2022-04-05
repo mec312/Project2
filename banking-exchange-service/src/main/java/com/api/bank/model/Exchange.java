@@ -1,12 +1,12 @@
 package com.api.bank.model;
 
-import com.api.bank.internal.BaseModel;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Builder
@@ -16,24 +16,23 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @ToString
 @Document(value = "Exchange")
-public class Exchange {
+public class Exchange  implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     private String id;
 
-    @Valid
-    @NotNull
+
+    private String code;
+
     private BigDecimal amount;
 
-    @Valid
-    @NotNull
-    private BaseModel originCurrency;
 
-    @Valid
-    @NotNull
-    private BaseModel destinationCurrency;
+    private String originCurrency;
 
-    @Valid
-    @NotNull
+
+    private String destinationCurrency;
+
+
     private Boolean isActive;
 }

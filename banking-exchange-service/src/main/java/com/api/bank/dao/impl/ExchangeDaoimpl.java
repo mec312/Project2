@@ -4,7 +4,6 @@ import com.api.bank.dao.ExchangeDao;
 import com.api.bank.exception.ValidationException;
 import com.api.bank.model.Exchange;
 import com.api.bank.repository.ExchangeRepository;
-import com.api.bank.request.ExchangeRequest;
 import io.reactivex.Maybe;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +24,9 @@ public class ExchangeDaoimpl implements ExchangeDao {
     @Override
     public Maybe<Exchange> createExchange(Exchange request){
 
-        ExchangeRequest rq = ExchangeRequest.builder()
-                .destinationCurrency(request.getDestinationCurrency())
-                .originCurrency(request.getOriginCurrency()).build();
 
-        Optional.ofNullable(repository.findExchange(rq))
+
+        Optional.ofNullable(repository.findByCode(request.getCode()))
                 .ifPresentOrElse(u -> {
                     throw new ValidationException("Exchange ya existe");
                 }, () -> {
@@ -41,8 +38,8 @@ public class ExchangeDaoimpl implements ExchangeDao {
 
     @Override
     @Transactional
-    @Cacheable(value = "exchange", key = "#id")
-    public Exchange findExchange(ExchangeRequest request){
-        return repository.findExchange(request);
+    @Cacheable(value = "exchange", key = "#code")
+    public Exchange findExchange(String code){
+        return repository.findByCode(code);
     }
 }

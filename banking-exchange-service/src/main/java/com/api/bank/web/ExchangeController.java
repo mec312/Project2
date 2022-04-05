@@ -2,7 +2,6 @@ package com.api.bank.web;
 
 import com.api.bank.bussiness.ExchangeService;
 import com.api.bank.model.Exchange;
-import com.api.bank.request.ExchangeRequest;
 import io.reactivex.Maybe;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +24,14 @@ public class ExchangeController {
 
     @PostMapping(value = "/createExchange")
     public Maybe<ResponseEntity<Exchange>> createExchange(@Valid @RequestBody Exchange request) {
+        request.setCode(request.getOriginCurrency().concat(request.getDestinationCurrency()));
         log.info("Creating account with {}", request.toString());
         return exchangeService.createExchange(request);
     }
 
     @GetMapping(value = "/findExchange")
-    public Maybe<ResponseEntity<Exchange>> findExchange(@RequestParam(required = true) ExchangeRequest request) {
-        return exchangeService.findExchange(request);
+    public Maybe<ResponseEntity<Exchange>> findExchange(@RequestParam(required = true) String originCurrency, String destinationCurrency) {
+        return exchangeService.findExchange(originCurrency, destinationCurrency);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
