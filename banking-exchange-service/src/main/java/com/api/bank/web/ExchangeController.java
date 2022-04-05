@@ -1,14 +1,18 @@
 package com.api.bank.web;
 
+import com.api.bank.bussiness.ExchangeService;
+import com.api.bank.model.Exchange;
+import com.api.bank.request.ExchangeRequest;
+import io.reactivex.Maybe;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +20,19 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/exchange")
 public class ExchangeController {
+    @Autowired
+    private ExchangeService exchangeService;
 
+    @PostMapping(value = "/createExchange")
+    public Maybe<ResponseEntity<Exchange>> createExchange(@Valid @RequestBody Exchange request) {
+        log.info("Creating account with {}", request.toString());
+        return exchangeService.createExchange(request);
+    }
+
+    @GetMapping(value = "/findExchange")
+    public Maybe<ResponseEntity<Exchange>> findExchange(@RequestParam(required = true) ExchangeRequest request) {
+        return exchangeService.findExchange(request);
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
