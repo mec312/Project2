@@ -6,7 +6,5 @@ spring:
             uri: mongodb+srv://xvris:xvris@cluster0.bpun4.mongodb.net/apibanca
     cache: redis
     redis:
-        host: bankEveris.redis.cache.windows.net
-        port: 6380
-        password: eTMP2atO2ySMPRm405iAh9ngE1uwltujtAzCaKs9QHk=
-        ssl: true
+        host: localhost
+        port: 6379

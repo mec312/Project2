@@ -10,13 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class ExchangeDaoimpl implements ExchangeDao {
+public class ExchangeDaoImpl implements ExchangeDao {
 
     @Autowired
     private ExchangeRepository repository;
