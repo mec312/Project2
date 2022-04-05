@@ -2,6 +2,7 @@ package com.api.bank.bussiness.impl;
 
 import com.api.bank.bussiness.UserService;
 import com.api.bank.dao.UserDao;
+import com.api.bank.exception.ValidationException;
 import com.api.bank.internal.UserStatus;
 import com.api.bank.model.User;
 import io.reactivex.Maybe;

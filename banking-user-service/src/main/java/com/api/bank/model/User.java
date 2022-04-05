@@ -30,34 +30,25 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     private String id;
-    @Valid
-    @Nullable
+
     private String firstName;
-    @Valid
-    @Nullable
+
     private String lastName;
-    @Valid
-    @Nullable
+
     private int age;
 
-    @Valid
-    @NotNull
+
     private String dni;
-    @Valid
-    @NotNull
+
     private String cellphoneNumber;
-    @Valid
-    @NotNull
+
     private String cellphoneImei;
-    @Valid
-    @NotNull
+
     private String email;
 
-    @Valid
-    @Nullable
+
     private UserStatus userStatus;
-    @Valid
-    @Nullable
+
     private UserType userType;
 
 }
