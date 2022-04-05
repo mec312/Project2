@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 spring:
   application:
     name: banking-gateway-service
@@ -37,43 +36,3 @@ eureka:
     client:
         service-url:
             defaultZone: http://localhost:8082/eureka/
-=======
-spring:
-  application:
-    name: banking-gateway-service
-  cloud:
-    gateway:
-      routes:
-        - id: banking-user-service
-          uri: lb://banking-user-service
-          predicates:
-            - Path=/ms/user/**   
-          filters:  
-            - StripPrefix=2
-        - id: banking-product-service
-          uri: lb://banking-product-service
-          predicates:
-            - Path=/ms/product/**   
-          filters:  
-            - StripPrefix=2
-        - id: banking-transaction-service
-          uri: lb://banking-transaction-service
-          predicates:
-            - Path=/ms/trx/**   
-          filters:  
-            - StripPrefix=2
-        - id: banking-yanki-service
-          uri: lb://banking-yanki-service
-          predicates:
-            - Path=/ms/yanki/**   
-          filters:  
-            - StripPrefix=2                                    
-          
-server:
-    port: 8083
-
-eureka:
-    client:
-        service-url:
-            defaultZone: http://localhost:8082/eureka/
->>>>>>> 1a97363320a9d4293ca5565a1b19c280cd84a72e
