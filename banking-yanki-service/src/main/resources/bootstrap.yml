@@ -1,10 +1,4 @@
-server:
-    port: 8087
 spring:
-    cache: redis
-    redis:
-        host: localhost
-        port: 6379
     application:
         name: banking-yanki-service
     cloud:
@@ -12,9 +6,6 @@ spring:
             uri: http://localhost:8081
             username: nttdata
             password: nttd4t4
-    data:
-        mongodb:
-            uri: mongodb+srv://xvris:xvris@cluster0.bpun4.mongodb.net/apibanca
 
 eureka:
     client:
