@@ -12,4 +12,5 @@ public interface YankiService {
     Maybe<ResponseEntity<Transaction>> FundTransferYanki(String fromAccount, String toAccount, BigDecimal amount);
     Maybe<ResponseEntity<Transaction>> PayYanki(String fromAccount, BigDecimal amount);
     Maybe<ResponseEntity<Transaction>> MembershipYanki(String YankiAccount, String ChosenAccount);
+    Maybe<ResponseEntity<Transaction>> BuyYankiBootCoin(String fromAccount, BigDecimal amount);
 }

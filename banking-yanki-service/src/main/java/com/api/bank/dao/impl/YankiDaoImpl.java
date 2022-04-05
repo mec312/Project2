@@ -89,4 +89,18 @@ public class YankiDaoImpl implements YankiDao {
         Account accYanki  = restT.postForObject(uri2, chAcc, Account.class);
         return trx;
     }
+
+    @Override
+    public Transaction BuyYankiBootCoin(String fromAccount , BigDecimal amount){
+        RestTemplate restT = new RestTemplate();
+
+        String uri2 ="http://localhost:8086/transaction/buyBootCoin";
+        Transaction trx = Transaction.builder()
+                .amount(amount)
+                .fromAccount(fromAccount)
+                .transactionType(TransactionType.BUY_BOOTCOIN)
+                .build();
+        Transaction trxYanki  = restT.postForObject(uri2, trx, Transaction.class);
+        return trxYanki;
+    }
 }

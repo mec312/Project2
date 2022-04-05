@@ -52,6 +52,11 @@ public class YankiController {
         return yankiService.MembershipYanki(mbs.getYankiaccount(), mbs.getChosenaccount());
     }
 
+    @PostMapping(value = "/BuyYankiBootCoin")
+    public Maybe<ResponseEntity<Transaction>> BuyYankiBootCoin(@Valid @RequestBody Transaction trx){
+        return yankiService.PayYanki(trx.getFromAccount(), trx.getAmount());
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {

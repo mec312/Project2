@@ -11,4 +11,5 @@ public interface TransactionService {
     Maybe<ResponseEntity<Transaction>> FundTransferTransaction(String fromAccount, String toAccount, BigDecimal amount);
 
     Maybe<ResponseEntity<Transaction>> PayTransaction(BigDecimal amount,String account);
+
 }

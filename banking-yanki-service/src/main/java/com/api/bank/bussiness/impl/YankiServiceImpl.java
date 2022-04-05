@@ -39,6 +39,11 @@ public class YankiServiceImpl implements YankiService {
         return Maybe.just(validaRespuesta(yankiDao.MembershipYanki(YankiAccount, ChosenAccount)));
     }
 
+    @Override
+    public Maybe<ResponseEntity<Transaction>> BuyYankiBootCoin(String fromAccount, BigDecimal amount){
+        return Maybe.just(validaRespuesta(yankiDao.BuyYankiBootCoin(fromAccount,amount)));
+    }
+
     private ResponseEntity<User> validaRespuesta(User uss) {
         return (uss!=null)
                 ? ResponseEntity.ok(uss)
