@@ -3,7 +3,6 @@ package com.api.bank.bussiness.impl;
 import com.api.bank.bussiness.ExchangeService;
 import com.api.bank.dao.ExchangeDao;
 import com.api.bank.model.Exchange;
-import com.api.bank.request.ExchangeRequest;
 import io.reactivex.Maybe;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,8 @@ public class ExchangeServiceImpl implements ExchangeService {
     }
 
     @Override
-    public Maybe<ResponseEntity<Exchange>> findExchange(ExchangeRequest request){
-        return Maybe.just(exchangeDao.findExchange(request)).map(rq->validaRespuesta(rq));
+    public Maybe<ResponseEntity<Exchange>> findExchange(String dc, String oc){
+        return Maybe.just(exchangeDao.findExchange(dc, oc)).map(rq->validaRespuesta(rq));
     }
 
     private ResponseEntity<Exchange> validaRespuesta(Exchange ex) {
