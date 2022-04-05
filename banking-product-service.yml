@@ -1,5 +1,5 @@
 server:
-    port: 8084
+    port: 8085
 spring:
     cache: redis
     redis:
@@ -8,22 +8,19 @@ spring:
     data:
         mongodb:
             uri: mongodb+srv://xvris:xvris@cluster0.bpun4.mongodb.net/apibanca
-            
+
 resilience4j.circuitbreaker:
     instances:
-        regUser:
+        fundTransfer:
             registerHealthIndicator: true
             slidingWindowSize: 100
-        updUser:
-            registerHealthIndicator: true
-            slidingWindowSize: 100
-        findUserbyDni:
+        payment:
             registerHealthIndicator: true
             slidingWindowSize: 100
 
 resilience4j.retry:
     instances:
-        regUser:
+        fundTransfer:
             maxAttempts: 3
             waitDuration: 10s
             enableExponentialBackoff: true
@@ -31,15 +28,7 @@ resilience4j.retry:
             retryExceptions:
                 - org.springframework.web.client.HttpServerErrorException
                 - java.io.IOException
-        updUser:
-            maxAttempts: 3
-            waitDuration: 10s
-            enableExponentialBackoff: true
-            exponentialBackoffMultiplier: 2
-            retryExceptions:
-                - org.springframework.web.client.HttpServerErrorException
-                - java.io.IOException
-        findUserbyDni:
+        payment:
             maxAttempts: 3
             waitDuration: 10s
             enableExponentialBackoff: true
@@ -50,43 +39,67 @@ resilience4j.retry:
 
 resilience4j.bulkhead:
     instances:
-        regUser:
+        findAccountByNumber:
             maxConcurrentCalls: 10
-        updUser:
+        createAccount:
             maxConcurrentCalls: 10
-        findUserbyDni:
+        updateAccount:
+            maxConcurrentCalls: 10
+        createCredit:
+            maxConcurrentCalls: 10
+        findCreditbyNumber:
             maxConcurrentCalls: 10
 
 resilience4j.thread-pool-bulkhead:
   instances:
-    regUser:
+    findAccountByNumber:
       maxThreadPoolSize: 1
       coreThreadPoolSize: 1
       queueCapacity: 1
-    updUser:
+    createAccount:
       maxThreadPoolSize: 1
       coreThreadPoolSize: 1
       queueCapacity: 1
-    findUserbyDni:
+    updateAccount:
+      maxThreadPoolSize: 1
+      coreThreadPoolSize: 1
+      queueCapacity: 1
+    createCredit:
+      maxThreadPoolSize: 1
+      coreThreadPoolSize: 1
+      queueCapacity: 1
+    findCreditbyNumber:
       maxThreadPoolSize: 1
       coreThreadPoolSize: 1
       queueCapacity: 1
 
 resilience4j.ratelimiter:
     instances:
-        regUser:
+        findAccountByNumber:
             limitForPeriod: 10
             limitRefreshPeriod: 1s
             timeoutDuration: 0
             registerHealthIndicator: true
             eventConsumerBufferSize: 100
-        updUser:
+        createAccount:
             limitForPeriod: 10
             limitRefreshPeriod: 1s
             timeoutDuration: 0
             registerHealthIndicator: true
             eventConsumerBufferSize: 100
-        findUserbyDni:
+        updateAccount:
+            limitForPeriod: 10
+            limitRefreshPeriod: 1s
+            timeoutDuration: 0
+            registerHealthIndicator: true
+            eventConsumerBufferSize: 100
+        createCredit:
+            limitForPeriod: 10
+            limitRefreshPeriod: 1s
+            timeoutDuration: 0
+            registerHealthIndicator: true
+            eventConsumerBufferSize: 100
+        findCreditbyNumber:
             limitForPeriod: 10
             limitRefreshPeriod: 1s
             timeoutDuration: 0
@@ -95,12 +108,18 @@ resilience4j.ratelimiter:
 
 resilience4j.timelimiter:
     instances:
-        regUser:
+        findAccountByNumber:
             timeoutDuration: 2s
             cancelRunningFuture: true
-        updUser:
+        createAccount:
             timeoutDuration: 2s
             cancelRunningFuture: true
-        findUserbyDni:
+        updateAccount:
+            timeoutDuration: 2s
+            cancelRunningFuture: true
+        createCredit:
+            timeoutDuration: 2s
+            cancelRunningFuture: true
+        findCreditbyNumber:
             timeoutDuration: 2s
             cancelRunningFuture: true
