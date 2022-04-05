@@ -1,19 +1,112 @@
 spring:
+    cache: redis
+    redis:
+        host: bankEveris.redis.cache.windows.net
+        port: 6380
+        password: eTMP2atO2ySMPRm405iAh9ngE1uwltujtAzCaKs9QHk=
+        ssl: true
+    data:
+        mongodb:
+            uri: mongodb+srv://xvris:xvris@cluster0.bpun4.mongodb.net/apibanca
     application:
         name: banking-user-service
-    cloud:
-        config:
-            uri: http://localhost:8081
-            username: nttdata
-            password: nttd4t4
-    gateway:
-        discovery:
-            locator:
-                enabled: true
-eureka:
-    client:
-        service-url:
-            defaultZone: http://localhost:8082/eureka/
 
-    instance:
-        preferIpAddress: true
+server:
+    port: 8084
+
+resilience4j.circuitbreaker:
+    instances:
+        regUser:
+            registerHealthIndicator: true
+            slidingWindowSize: 100
+        updUser:
+            registerHealthIndicator: true
+            slidingWindowSize: 100
+        findUserbyDni:
+            registerHealthIndicator: true
+            slidingWindowSize: 100
+
+resilience4j.retry:
+    instances:
+        regUser:
+            maxAttempts: 3
+            waitDuration: 10s
+            enableExponentialBackoff: true
+            exponentialBackoffMultiplier: 2
+            retryExceptions:
+                - org.springframework.web.client.HttpServerErrorException
+                - java.io.IOException
+        updUser:
+            maxAttempts: 3
+            waitDuration: 10s
+            enableExponentialBackoff: true
+            exponentialBackoffMultiplier: 2
+            retryExceptions:
+                - org.springframework.web.client.HttpServerErrorException
+                - java.io.IOException
+        findUserbyDni:
+            maxAttempts: 3
+            waitDuration: 10s
+            enableExponentialBackoff: true
+            exponentialBackoffMultiplier: 2
+            retryExceptions:
+                - org.springframework.web.client.HttpServerErrorException
+                - java.io.IOException
+
+resilience4j.bulkhead:
+    instances:
+        regUser:
+            maxConcurrentCalls: 10
+        updUser:
+            maxConcurrentCalls: 10
+        findUserbyDni:
+            maxConcurrentCalls: 10
+
+resilience4j.thread-pool-bulkhead:
+    instances:
+        regUser:
+            maxThreadPoolSize: 1
+            coreThreadPoolSize: 1
+            queueCapacity: 1
+        updUser:
+            maxThreadPoolSize: 1
+            coreThreadPoolSize: 1
+            queueCapacity: 1
+        findUserbyDni:
+            maxThreadPoolSize: 1
+            coreThreadPoolSize: 1
+            queueCapacity: 1
+
+resilience4j.ratelimiter:
+    instances:
+        regUser:
+            limitForPeriod: 10
+            limitRefreshPeriod: 1s
+            timeoutDuration: 0
+            registerHealthIndicator: true
+            eventConsumerBufferSize: 100
+        updUser:
+            limitForPeriod: 10
+            limitRefreshPeriod: 1s
+            timeoutDuration: 0
+            registerHealthIndicator: true
+            eventConsumerBufferSize: 100
+        findUserbyDni:
+            limitForPeriod: 10
+            limitRefreshPeriod: 1s
+            timeoutDuration: 0
+            registerHealthIndicator: true
+            eventConsumerBufferSize: 100
+
+resilience4j.timelimiter:
+    instances:
+        regUser:
+            timeoutDuration: 2s
+            cancelRunningFuture: true
+        updUser:
+            timeoutDuration: 2s
+            cancelRunningFuture: true
+        findUserbyDni:
+            timeoutDuration: 2s
+
+            cancelRunningFuture: true

@@ -1,0 +1,12 @@
+server:
+    port: 8088
+spring:
+    cache: redis
+    redis:
+        host: bankEveris.redis.cache.windows.net
+        port: 6380
+        password: eTMP2atO2ySMPRm405iAh9ngE1uwltujtAzCaKs9QHk=
+        ssl: true
+    data:
+        mongodb:
+            uri: mongodb+srv://xvris:xvris@cluster0.bpun4.mongodb.net/apibanca

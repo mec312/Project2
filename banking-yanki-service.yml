@@ -1,15 +1,7 @@
-<<<<<<< HEAD
 server:
     port: 8087
 spring:
     data:
         mongodb:
             uri: mongodb+srv://xvris:xvris@cluster0.bpun4.mongodb.net/apibanca
-=======
-server:
-    port: 8087
-spring:
-    data:
-        mongodb:
-            uri: mongodb+srv://xvris:xvris@cluster0.bpun4.mongodb.net/apibanca
->>>>>>> 1a97363320a9d4293ca5565a1b19c280cd84a72e
+

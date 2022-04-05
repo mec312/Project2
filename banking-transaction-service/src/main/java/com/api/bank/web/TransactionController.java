@@ -65,6 +65,8 @@ public class TransactionController {
         return errors;
     }
 
+
+
     //resilience4j
     public ResponseEntity<String> subscribesFallbackMethod(Exception e) {
         return new ResponseEntity<String>("Servicio esta caido, intente mas tarde", HttpStatus.OK);

@@ -35,4 +35,8 @@ server:
 eureka:
     client:
         service-url:
+<<<<<<< HEAD
             defaultZone: http://localhost:8082/eureka/
+=======
+            defaultZone: http://localhost:8082/eureka/
+>>>>>>> ddba141990a77965cbe19185daab111e9f8dee04

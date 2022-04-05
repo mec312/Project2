@@ -105,5 +105,8 @@ resilience4j.timelimiter:
             cancelRunningFuture: true
         findUserbyDni:
             timeoutDuration: 2s
+<<<<<<< HEAD
 
+=======
+>>>>>>> ddba141990a77965cbe19185daab111e9f8dee04
             cancelRunningFuture: true

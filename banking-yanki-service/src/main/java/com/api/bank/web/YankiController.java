@@ -44,13 +44,17 @@ public class YankiController {
     }
 
 
-    //@RequestMapping(value = "/memberYanki", method = RequestMethod.POST)
     @PostMapping(value = "/memberYanki")
     @ResponseBody
     public Maybe<ResponseEntity<Transaction>> membershipYanki(@Valid @RequestBody MemberShip mbs) {
         log.info("yankiaccount: "+ mbs.getYankiaccount());
         log.info("chosenaccount: "+ mbs.getChosenaccount());
         return yankiService.MembershipYanki(mbs.getYankiaccount(), mbs.getChosenaccount());
+    }
+
+    @PostMapping(value = "/BuyYankiBootCoin")
+    public Maybe<ResponseEntity<Transaction>> BuyYankiBootCoin(@Valid @RequestBody Transaction trx){
+        return yankiService.PayYanki(trx.getFromAccount(), trx.getAmount());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
