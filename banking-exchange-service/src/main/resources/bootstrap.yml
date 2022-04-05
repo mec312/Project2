@@ -1,0 +1,13 @@
+spring:
+    application:
+        name: banking-exchange-service
+    cloud:
+        config:
+            uri: http://localhost:8081
+            username: nttdata
+            password: nttd4t4
+
+eureka:
+    client:
+        serviceUrl:
+            defaultZone: http://localhost:8082/eureka/
