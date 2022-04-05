@@ -7,9 +7,28 @@ spring:
         - id: banking-user-service
           uri: lb://banking-user-service
           predicates:
-            - Path=/ms/cliente/**   
+            - Path=/ms/user/**   
           filters:  
             - StripPrefix=2
+        - id: banking-product-service
+          uri: lb://banking-product-service
+          predicates:
+            - Path=/ms/product/**   
+          filters:  
+            - StripPrefix=2
+        - id: banking-transaction-service
+          uri: lb://banking-transaction-service
+          predicates:
+            - Path=/ms/trx/**   
+          filters:  
+            - StripPrefix=2
+        - id: banking-yanki-service
+          uri: lb://banking-yanki-service
+          predicates:
+            - Path=/ms/yanki/**   
+          filters:  
+            - StripPrefix=2                                    
+          
 server:
     port: 8083
 
@@ -17,3 +36,4 @@ eureka:
     client:
         service-url:
             defaultZone: http://localhost:8082/eureka/
+
