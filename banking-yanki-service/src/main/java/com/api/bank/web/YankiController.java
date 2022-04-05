@@ -44,7 +44,6 @@ public class YankiController {
     }
 
 
-    //@RequestMapping(value = "/memberYanki", method = RequestMethod.POST)
     @PostMapping(value = "/memberYanki")
     @ResponseBody
     public Maybe<ResponseEntity<Transaction>> membershipYanki(@Valid @RequestBody MemberShip mbs) {
