@@ -26,4 +26,10 @@ public class ExchangeServiceImpl implements ExchangeService {
     public Maybe<ResponseEntity<Exchange>> findExchange(ExchangeRequest request){
         return null;
     }
+
+    private ResponseEntity<Exchange> validaRespuesta(Exchange ex) {
+        return (ex != null)
+                ? ResponseEntity.ok(ex)
+                : ResponseEntity.noContent().build();
+    }
 }

@@ -1,15 +1,15 @@
 package com.api.bank.request;
 
 import com.api.bank.internal.BaseModel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class ExchangeRequest {
     @Valid
