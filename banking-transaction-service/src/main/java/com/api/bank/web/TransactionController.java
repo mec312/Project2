@@ -53,6 +53,11 @@ public class TransactionController {
         return transactionService.PayTransaction(trx.getAmount(), trx.getFromAccount());
     }
 
+    @PostMapping(value = "/buyBootCoin")
+    public Maybe<ResponseEntity<Transaction>> buyBootCoin(@Valid @RequestBody Transaction trx){
+        log.info("Pagos - Inicio");
+        return transactionService.buyBootCoin(trx.getAmount(), trx.getFromAccount());
+    }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {

@@ -2,6 +2,8 @@ package com.api.bank.dao.impl;
 
 import com.api.bank.dao.TransactionDao;
 import com.api.bank.exception.ValidationException;
+import com.api.bank.internal.AccountStatus;
+import com.api.bank.internal.AccountType;
 import com.api.bank.internal.TransactionType;
 import com.api.bank.model.Account;
 import com.api.bank.model.Transaction;
@@ -57,16 +59,6 @@ public class TransactionDaoImpl implements TransactionDao {
         String uri2 ="http://localhost:8085/product/account/updAccount";
         Account fromAc = restT.postForObject(uri2,fromAcc, Account.class);
 
-        /*NUEVO - Actualizar Saldo en cuenta- NO FUNCIONA */
-/*
-        String restUrl = "http://localhost:8085/product/account/updateAccount";
-        Mono<Account> fromAccMono = Mono.just(fromAcc);
-        Mono<Account> resp = WebClient.create().post()
-                .uri(restUrl)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(fromAccMono,Account.class)
-                .retrieve().bodyToMono(Account.class);//respuesta del post
-*/
         /*Generando transaccion*/
         Transaction trx = repositoryTra.save(Transaction.builder().transactionId(trxId).transactionType(TransactionType.UTILITY_PAYMENT).fromAccount(fromAcc.getNumber()).amount(amount.negate()).build());
         return trx;
@@ -88,27 +80,6 @@ public class TransactionDaoImpl implements TransactionDao {
         Account fromAcc = restT.postForObject(uri,fromAccount, Account.class);
         Account toAcc = restT.postForObject(uri,toAccount, Account.class);
 
-        /*NUEVO - Actualizar Saldo en cuenta- NO FUNCIONA */
-/*
-        Mono<Account> fromAccMono = Mono.just(fromAccount);
-        Mono<Account> toAccMono = Mono.just(toAccount);
-
-        WebClient webClient = WebClient.create("http://localhost:8085/product");
-
-        Mono<Account> resp1 = webClient.post()
-                .uri("/account/updateAccount")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(fromAccMono,Account.class)
-                .retrieve()
-                .bodyToMono(Account.class);//respuesta del post
-
-        Mono<Account> resp2 = webClient.post()
-                .uri("/account/updateAccount")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(toAccMono,Account.class)
-                .retrieve()
-                .bodyToMono(Account.class);//respuesta del post
-*/
         /*Generando transaccion -1*/
         repositoryTra.save(Transaction.builder()
                 .transactionType(TransactionType.FUND_TRANSFER)
@@ -124,6 +95,32 @@ public class TransactionDaoImpl implements TransactionDao {
                 .transactionId(trxId)
                 .amount(amount).build());
         Transaction trx = Transaction.builder().transactionId(trxId).amount(amount).transactionType(TransactionType.FUND_TRANSFER).toAccount(toAccount.getNumber()).fromAccount(fromAccount.getNumber()).build();
+        return trx;
+
+    }
+
+    @Override
+    public Transaction buyBootCoin(BigDecimal amount,String account){
+        String trxId = UUID.randomUUID().toString();//cambiar
+
+        RestTemplate restT = new RestTemplate();
+        String uri ="http://localhost:8085/product/account/findAccountByNumber?accountNumber=";
+        Account fromAcc = restT.getForObject(uri+account,Account.class, Account.class);
+
+        /*validando balance de cuenta*/
+        validateBalance(fromAcc, amount);
+        /*Seteando nuevos valores*/
+        fromAcc.setActualBalance(fromAcc.getActualBalance().subtract(amount));
+        fromAcc.setAvailableBalance(fromAcc.getAvailableBalance().subtract(amount));
+
+        /*ANTIGUO - Actualizar Saldo en cuenta- FUNCIONA */
+        String uri2 ="http://localhost:8085/product/account/updAccount";
+        Account fromAc = restT.postForObject(uri2,fromAcc, Account.class);
+
+
+
+        /*Generando transaccion*/
+        Transaction trx = repositoryTra.save(Transaction.builder().transactionId(trxId).transactionType(TransactionType.UTILITY_PAYMENT).fromAccount(fromAcc.getNumber()).amount(amount.negate()).build());
         return trx;
 
     }

@@ -12,4 +12,6 @@ public interface TransactionService {
 
     Maybe<ResponseEntity<Transaction>> PayTransaction(BigDecimal amount,String account);
 
+    Maybe<ResponseEntity<Transaction>> buyBootCoin(BigDecimal amount,String account);
+
 }

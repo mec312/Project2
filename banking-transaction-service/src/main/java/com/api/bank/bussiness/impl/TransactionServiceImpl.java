@@ -31,6 +31,11 @@ public class TransactionServiceImpl implements TransactionService {
         return Maybe.just(validaRespuesta(transactionDao.FundTransferTransaction(fromAccount,toAccount,amount)));
     }
 
+    @Override
+    public Maybe<ResponseEntity<Transaction>> buyBootCoin(BigDecimal amount, String account){
+        return Maybe.just(validaRespuesta(transactionDao.buyBootCoin(amount,account)));
+    }
+
     private ResponseEntity<Transaction> validaRespuesta(Transaction trx) {
         return (trx!=null)
                 ? ResponseEntity.ok(trx)
